@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <title>NPO International</title>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel='stylesheet' href='css/nprogress.css'/>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-light">
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-    <h5 class="my-0 mr-md-auto font-weight-normal">NPO International</h5>
+    <h5 class="my-0 mr-md-auto font-weight-normal"><a href="index.html">NPO International</a></h5>
     <nav class="my-2 my-md-0 mr-md-3">
         <!--
         <a class="p-2 text-dark" href="#">Features</a>
@@ -22,18 +24,26 @@
     <!--
     <a class="btn btn-outline-primary" href="#">Sign up</a>
     -->
+
+    <div class="form-inline my-2 my-md-0">
+        <input class="form-control" type="text" id="search" placeholder="Search" aria-label="Search">
+    </div>
 </div>
 
 <main role="main">
     <div class="album py-2">
         <div class="container">
             <div class="row mb-3">
-                <div class="form-inline">
-                <select class="form-control mx-2 filter" data-prop="az" id="filterAz"></select>
-                <select class="form-control mx-2 filter" data-prop="genreId" id="filterGenre"></select>
-                <select class="form-control mx-2 filter" data-prop="dateFrom" id="filterMostWatched"></select>
-                <select class="form-control mx-2 filter" data-prop="page" id="filterPage"></select>
+                <div class="form-inline col-md-10 col-sm-12">
+                    <select class="form-control mr-md-4 filter" data-prop="az" id="filterAz"></select>
+                    <select class="form-control mr-md-4 filter" data-prop="genreId" id="filterGenre"></select>
+                    <select class="form-control mr-md-4 filter" data-prop="dateFrom" id="filterMostWatched"></select>
+                    <select class="form-control mr-md-4 filter" data-prop="page" id="filterPage"></select>
                 </div>
+                <div class="col-md-2 col-sm-12">
+                    <a href="#" class="float-right close-search-results" style="display: none">⨯ Close search results</a>
+                </div>
+
             </div>
             <div class="row" id="series">
                 <div class="col-12 text-center"><div class="loader m-auto"></div></div>
@@ -70,12 +80,16 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-9">
+                        <select class="series-seasons form-control mb-2">
+
+                        </select>
                         <ul class="list-group list-group-flush series-episodes">
 
                         </ul>
                     </div>
                     <div class="col-lg-3">
-                        <h5>Broadcasters</h5>
+                        <img class="series-channel mb-3" style="max-width: 100px" src="">
+                        <h5>Broadcaster</h5>
                         <p class="series-broadcasters"></p>
                         <h5>Episodes</h5>
                         <p class="series-episodes-count">35</p>

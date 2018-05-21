@@ -32,7 +32,16 @@ let npo = (() => {
         return translation;
     }
 
+    async function getJson(url) {
+        return (await fetch(url, {
+            headers: {
+                "ApiKey": "e45fe473feaf42ad9a215007c6aa5e7e"
+            }
+        })).json();
+    }
+
     return {
-        translate: translate
+        translate: translate,
+        getJson: getJson
     }
 })();

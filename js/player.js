@@ -100,11 +100,13 @@ async function load() {
     NProgress.start();
     let videoId = new URL(window.location).searchParams.get("v");
     await getVideoUrl(videoId);
-    let episode = await (await fetch("https://cors-anywhere.herokuapp.com/https://apps-api.uitzendinggemist.nl/episodes/" + videoId + ".json")).json();
-    $(".series-title").text(episode["name"]);
+    let episode = await npo.getJson("https://start-api.npo.nl/page/episode/" + videoId);
+    episode = episode["components"][0]["episode"];
+    $(".series-title").text(episode["title"]);
     $(".series-broadcasters").text(episode["broadcasters"].join(", "));
-    $(".series-date").text(new Date(episode["broadcasted_at"] * 1000).toLocaleDateString());
+    $(".series-date").text(`season ` + episode["seasonNumber"] + ` episode ` + episode["episodeNumber"] + ` - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString());
     $(".series-description").text(await npo.translate("NL", episode["description"]));
+    $(".series-channel").attr("src", "img/" + episode["channel"] + ".svg");
 
     setInterval(async () => {
         let track = null;

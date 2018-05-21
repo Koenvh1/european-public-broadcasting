@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <title>NPO International</title>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel='stylesheet' href='css/nprogress.css'/>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="bg-light">
 <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-    <h5 class="my-0 mr-md-auto font-weight-normal">NPO International</h5>
+    <h5 class="my-0 mr-md-auto font-weight-normal"><a href="index.html">NPO International</a></h5>
     <nav class="my-2 my-md-0 mr-md-3">
         <!--
         <a class="p-2 text-dark" href="#">Features</a>
@@ -26,13 +28,14 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-lg-8">
+        <div class="col-md-8 col-sm-12 video-player-container">
             <video id="videoPlayer" autoplay controls crossorigin="anonymous" class="box-shadow bg-dark w-100"></video>
         </div>
-        <div class="col-lg-4">
+        <div class="col-md-4 col-sm-12">
             <h1 class="display-4 series-title">Title</h1>
             <p class="text-muted"><span class="series-broadcasters"></span> - <span class="series-date"></span></p>
             <p class="lead series-description"></p>
+            <img class="series-channel mb-3" style="max-width: 100px" src="">
         </div>
     </div>
 </div>
