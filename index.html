@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NPO International</title>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel='stylesheet' href='css/nprogress.css'/>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-light">
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+    <h5 class="my-0 mr-md-auto font-weight-normal">NPO International</h5>
+    <nav class="my-2 my-md-0 mr-md-3">
+        <!--
+        <a class="p-2 text-dark" href="#">Features</a>
+        <a class="p-2 text-dark" href="#">Enterprise</a>
+        <a class="p-2 text-dark" href="#">Support</a>
+        <a class="p-2 text-dark" href="#">Pricing</a>
+        -->
+    </nav>
+    <!--
+    <a class="btn btn-outline-primary" href="#">Sign up</a>
+    -->
+</div>
+
+<main role="main">
+    <div class="album py-5">
+        <div class="container">
+            <div class="row" id="series">
+                <div class="col-12 text-center"><div class="loader m-auto"></div></div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<footer class="text-muted">
+    <div class="container">
+        <p class="float-right">
+            <a href="#">Back to top</a>
+        </p>
+        <p>&copy; <a href="https://koenvh.nl" target="_blank">Koenvh</a> - NPO International is not associated with Stichting Nederlandse Publieke Omroep.</p>
+    </div>
+</footer>
+
+<div class="modal fade series-modal" tabindex="-1" role="dialog" aria-labelledby="seriesModal" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content card">
+            <div class="modal-overlay">
+                <img class="card-img-top modal-image series-image" src="http://placehold.it/400x200" alt="Series image" onerror="this.src='http://placehold.it/400x200'">
+                <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h1 class="modal-overlay-text series-title">Hello!</h1>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <p class="lead series-description">Sal, Dex, Noa en Bloem zijn vrienden met een zeer uiteenlopende achtergrond en vastberaden forever bij elkaar te blijven. Maar is hun vriendschap opgewassen tegen de snelle veranderingen die hun levens doormaken? In #forever zijn de levens van de vier vrienden te volgen. De kijker wordt meegenomen in de roerige en herkenbare wereld van deze pubers.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-9">
+                        <ul class="list-group list-group-flush series-episodes">
+
+                        </ul>
+                    </div>
+                    <div class="col-lg-3">
+                        <h5>Broadcasters</h5>
+                        <p class="series-broadcasters"></p>
+                        <h5>Episodes</h5>
+                        <p class="series-episodes-count">35</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="js/bootstrap.bundle.js"></script>
+<script src='js/nprogress.js'></script>
+<script src="js/npo.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>
