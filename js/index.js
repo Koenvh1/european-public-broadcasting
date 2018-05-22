@@ -59,7 +59,7 @@ function removeEmpty(filters) {
 
 async function showSeriesModal(id) {
     NProgress.start();
-    let data = await npo.getJson("https://start-api.npo.nl/page/franchise/" + id + "?pageSize=10000");
+    let data = await npo.getJson("https://start-api.npo.nl/page/franchise/" + id + "?page=10000");
     let serie = data["components"][0]["series"];
     let image = "";
     if (serie.images != null && serie.images.header != null && serie.images.header.formats != null && serie.images.header.formats.web != null) {
@@ -70,7 +70,7 @@ async function showSeriesModal(id) {
 
     $(".series-image").attr("src", image);
     $(".series-title").text(serie["title"]);
-    $(".series-description").text(await npo.translate("NL", serie["description"]));
+    $(".series-description").html(await npo.translate("EN", serie["description"]));
     $(".series-broadcasters").text(serie["broadcasters"].join(", "));
     $(".series-episodes-count").text(data["components"][2]["data"]["total"]);
     $(".series-channel").attr("src", "img/" + serie["channel"] + ".svg");
@@ -156,7 +156,7 @@ async function switchSeason(id, season) {
 }
 
 async function search(term) {
-    let data = await npo.getJson("https://start-api.npo.nl/search?pageSize=24&page=1&query=" + term);
+    let data = await npo.getJson("https://start-api.npo.nl/search?pageSize=24&page=1&query=" + encodeURIComponent(term));
     $(".close-search-results").show();
     renderSeries(data["items"]);
 }
@@ -175,7 +175,7 @@ function renderSeries(series) {
         }
 
         content += `
-            <div class="col-md-2 series-item" data-id="` + serie.id + `">
+            <div class="col-lg-2 col-md-3 col-sm-12 series-item" data-id="` + serie.id + `">
                     <div class="card mb-4 box-shadow series-show">
                         <img class="card-img-top overview-image" src="` + image + `" alt="Series image" onerror="this.src='https://placehold.it/400x200'">
                         <div class="card-body">

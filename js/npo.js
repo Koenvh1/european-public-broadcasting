@@ -22,7 +22,7 @@ let npo = (() => {
             }
         };
 
-        const translationResponse = await fetch("https://cors-anywhere.herokuapp.com/https://www.deepl.com/jsonrpc", {
+        const translationResponse = await fetch("translate.php", {
             method: "POST",
             body: JSON.stringify(payload)
         });
@@ -30,6 +30,41 @@ let npo = (() => {
         let translation = (await translationResponse.json())["result"]["translations"][0]["beams"][0]["postprocessed_sentence"];
         translation = translation.replace(/\.{3,}/, "...");
         return translation;
+    }
+
+    async function ocr(image) {
+        const payload = {
+            "requests": [
+                {
+                    "features": [
+                        {
+                            "maxResults": 1,
+                            "type": "DOCUMENT_TEXT_DETECTION"
+                        }
+                    ],
+                    "image": {
+                        "content": image
+                    },
+                    "imageContext": {
+                        "languageHints": [
+                            "nl", "en"
+                        ]
+                    }
+                }
+            ]
+        };
+
+        const response = await fetch("https://cxl-services.appspot.com/proxy?url=https%3A%2F%2Fvision.googleapis.com%2Fv1%2Fimages%3Aannotate", {
+            method: "POST",
+            body: JSON.stringify(payload)
+        });
+
+        let intermediate = (await response.json())["responses"][0];
+        if (intermediate.hasOwnProperty("textAnnotations")) {
+            return intermediate["textAnnotations"][0]["description"];
+        } else {
+            return null;
+        }
     }
 
     async function getJson(url) {
@@ -42,6 +77,7 @@ let npo = (() => {
 
     return {
         translate: translate,
-        getJson: getJson
+        getJson: getJson,
+        ocr: ocr
     }
 })();

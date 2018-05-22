@@ -63,20 +63,24 @@ async function getVideoUrl(videoId) {
 }
 
 async function videoInfo(callback) {
+    if(callback.errorstring) {
+        alert(await npo.translate("EN", callback.errorstring))
+    }
     videoPlayer.src = callback.url;
 }
 
 async function translateSubtitles(track, start) {
     let cues = track.cues;
 
+        console.log(track.cues[start].text);
     let newItems = [];
-    for (let i = start - 1; i < start + 8; i++) {
+    for (let i = start - 1; i < start + 3; i++) {
         // Get the next five that have NOT been translated yet.
         if (translated[track.language].includes(i)) continue;
         newItems.push(i);
     }
 
-    for (let i = start - 1; i < start + 8; i++) {
+    for (let i = start - 1; i < start + 3; i++) {
         // Only translate the next five that have not been translated.
         if (!newItems.includes(i)) continue;
         const cue = cues[i];
@@ -85,7 +89,7 @@ async function translateSubtitles(track, start) {
         translated[track.language].push(i); // Mark this as translated.
 
         let text = cue.text;
-        console.log(cue.text);
+        //console.log(cue.text);
         cue.text = "";
         cue.text = await npo.translate(track.language, text);
 
@@ -93,8 +97,20 @@ async function translateSubtitles(track, start) {
 }
 
 videoPlayer.addEventListener("loadedmetadata", () => {
-    videoPlayer.textTracks[languages.findIndex(l => l.code === "EN")].mode = "showing";
+    const index = languages.findIndex(l => l.code === "EN");
+    videoPlayer.textTracks[index].mode = "showing";
 });
+
+function getCurrentTrack() {
+    let track = null;
+    for (let i = 0; i < videoPlayer.textTracks.length; i++) {
+        if (videoPlayer.textTracks[i].mode === "showing") {
+            track = videoPlayer.textTracks[i];
+            break;
+        }
+    }
+    return track;
+}
 
 async function load() {
     NProgress.start();
@@ -105,22 +121,64 @@ async function load() {
     $(".series-title").text(episode["title"]);
     $(".series-broadcasters").text(episode["broadcasters"].join(", "));
     $(".series-date").text(`season ` + episode["seasonNumber"] + ` episode ` + episode["episodeNumber"] + ` - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString());
-    $(".series-description").text(await npo.translate("NL", episode["description"]));
+    $(".series-description").html(await npo.translate("EN", episode["description"]));
     $(".series-channel").attr("src", "img/" + episode["channel"] + ".svg");
 
     setInterval(async () => {
-        let track = null;
-        for (let i = 0; i < videoPlayer.textTracks.length; i++) {
-            if (videoPlayer.textTracks[i].mode === "showing") {
-                track = videoPlayer.textTracks[i];
-                break;
+        let track = getCurrentTrack();
+        if (track != null && track.activeCues != null && track.activeCues.length > 0) {
+            for(let i = 0; i < track.activeCues.length; i++) {
+                let id = parseInt(track.activeCues[i]["id"]);
+                if (!isNaN(id)) {
+                    await translateSubtitles(track, id);
+                }
             }
         }
-        if (track != null && track.activeCues != null && track.activeCues.length > 0) {
-            await translateSubtitles(track, parseInt(track.activeCues[0]["id"]));
-        }
     }, 100);
+
+    setInterval(async () => {
+        if (!videoPlayer.paused && $("#enableOcr").is(":checked")) {
+            await ocr();
+        }
+    }, 2000);
     NProgress.done();
 }
 
 load();
+
+let lastOcr = null;
+
+async function ocr() {
+    let canvas = document.createElement("canvas");
+    let w = videoPlayer.videoWidth;
+    let h = Math.round(videoPlayer.videoHeight / 4);
+    canvas.width = w;
+    canvas.height = h;
+
+    let context = canvas.getContext("2d");
+    context.drawImage(videoPlayer, 0, h * 3, w, h, 0, 0, w, h);
+    let image = canvas.toDataURL("image/png");
+
+    $("#ocr").attr("src", image);
+
+    image = image.split(",")[1];
+    let response = await npo.ocr(image);
+    if(response != null && lastOcr !== response) {
+        lastOcr = response;
+        const track = getCurrentTrack();
+        let translation = await npo.translate(track.language, response);
+        //console.log(translation);
+
+        /*
+        for(let i = 0; i < videoPlayer.textTracks[1].activeCues.length; i++) {
+            let cue = videoPlayer.textTracks[1].activeCues[i];
+            if(cue.text === translation) {
+                cue.endTime += 2;
+                return;
+            }
+        }
+        */
+        track.addCue(new VTTCue(videoPlayer.currentTime, videoPlayer.currentTime + 1.8, translation));
+
+    }
+}
