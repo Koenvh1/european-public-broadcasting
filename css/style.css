@@ -34,6 +34,7 @@
 .modal-episode-image {
     width: 125px;
     height: auto;
+    min-height: 70px;
 }
 .modal-close {
     position: absolute;

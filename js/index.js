@@ -84,12 +84,13 @@ async function showSeriesModal(id) {
     } else {
         $(".series-seasons").hide();
     }
-    renderEpisodes(data["components"][2]["data"]["items"]);
+    renderEpisodes(data["components"][2]["data"]);
     $(".series-modal").modal("show");
     NProgress.done();
 }
 
-function renderEpisodes(items) {
+function renderEpisodes(data) {
+    let items = data["items"];
     let episodeContent = "";
     for (let i = 0; i < items.length; i++) {
         let episode = items[i];
@@ -107,6 +108,22 @@ function renderEpisodes(items) {
                                         <span class="badge badge-secondary badge-pill">` + new Date(episode["duration"] * 1000).toISOString().substr(11, 8) + `</span>
                                     </a>`
     }
+
+    if (data["_links"].hasOwnProperty("prev")) {
+        $(".series-previous").show().off("click").click(async event => {
+            await switchSeasonUrl(data["_links"]["prev"]["href"]);
+        });
+    } else {
+        $(".series-previous").hide();
+    }
+    if (data["_links"].hasOwnProperty("next")) {
+        $(".series-next").show().off("click").click(async event => {
+            await switchSeasonUrl(data["_links"]["next"]["href"]);
+        });
+    } else {
+        $(".series-next").hide();
+    }
+
     $(".series-episodes").html(episodeContent);
 }
 
@@ -150,9 +167,14 @@ async function showSeriesCollection(firstRun) {
     NProgress.done();
 }
 
+async function switchSeasonUrl(url) {
+    let data = await npo.getJson(url);
+    renderEpisodes(data);
+}
+
 async function switchSeason(id, season) {
     let data = await npo.getJson("https://start-api.npo.nl/media/series/" + id + "/episodes?seasonId=" + season);
-    renderEpisodes(data["items"]);
+    renderEpisodes(data);
 }
 
 async function search(term) {
