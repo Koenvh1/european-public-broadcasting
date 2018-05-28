@@ -102,7 +102,7 @@ function renderEpisodes(data) {
         }
         episodeContent += `<a class="list-group-item d-flex justify-content-between align-items-center" href="player.html?v=` + episode["id"] + `">
                                         <img src="` + image + `" alt="Still" class="modal-episode-image float-left ">
-                                        <span class="w-75 ml-2">` + episode["title"] + `<br>
+                                        <span class="w-75 ml-2">` + (episode["episodeTitle"] == null ? episode["title"] : episode["episodeTitle"]) + `<br>
                                             <small class="">Episode ` + episode["episodeNumber"] + ` - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString() + `</small>
                                         </span>
                                         <span class="badge badge-secondary badge-pill">` + new Date(episode["duration"] * 1000).toISOString().substr(11, 8) + `</span>

@@ -1,5 +1,5 @@
-let npo = (() => {
-    async function translate(language, text) {
+class npo {
+    static async translate(language, text) {
         const payload = {
             "id": 25,
             "jsonrpc": "2.0",
@@ -32,7 +32,7 @@ let npo = (() => {
         return translation;
     }
 
-    async function ocr(image) {
+    static async ocr(image) {
         const payload = {
             "requests": [
                 {
@@ -67,17 +67,11 @@ let npo = (() => {
         }
     }
 
-    async function getJson(url) {
+    static async getJson(url) {
         return (await fetch(url, {
             headers: {
                 "ApiKey": "e45fe473feaf42ad9a215007c6aa5e7e"
             }
         })).json();
     }
-
-    return {
-        translate: translate,
-        getJson: getJson,
-        ocr: ocr
-    }
-})();
+}

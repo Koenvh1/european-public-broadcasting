@@ -70,29 +70,33 @@ async function videoInfo(callback) {
 }
 
 async function translateSubtitles(track, start) {
+    start = parseInt(start);
     let cues = track.cues;
 
-        console.log(track.cues[start].text);
     let newItems = [];
-    for (let i = start - 1; i < start + 3; i++) {
+
+    for (let i = (start - 1); i < (start + 5); i++) {
+        if (cues[i] == null) continue;
+        // Make sure it has an ID, and is not OCR
+        if (!cues[i].id) continue;
         // Get the next five that have NOT been translated yet.
-        if (translated[track.language].includes(i)) continue;
+        if (translated[track.language].includes(cues[i].id)) continue;
+
         newItems.push(i);
     }
 
-    for (let i = start - 1; i < start + 3; i++) {
+    for (let i = (start - 1); i < (start + 5); i++) {
         // Only translate the next five that have not been translated.
         if (!newItems.includes(i)) continue;
         const cue = cues[i];
 
-        if (!cue.text) continue; // Cue text can be empty on mistake (when still processing), skip it then.
-        translated[track.language].push(i); // Mark this as translated.
+        if (!cue.text) return; // Cue text can be empty on mistake (when still processing), skip it then.
+        translated[track.language].push(cue.id); // Mark this as translated.
 
         let text = cue.text;
         //console.log(cue.text);
         cue.text = "";
         cue.text = await npo.translate(track.language, text);
-
     }
 }
 
@@ -130,11 +134,12 @@ async function load() {
             for(let i = 0; i < track.activeCues.length; i++) {
                 let id = parseInt(track.activeCues[i]["id"]);
                 if (!isNaN(id)) {
-                    await translateSubtitles(track, id);
+                    console.log(id);
+                    await translateSubtitles(track, Object.keys(track.cues).find(key => track.cues[key]["id"] === track.activeCues[i]["id"]));
                 }
             }
         }
-    }, 100);
+    }, 500);
 
     setInterval(async () => {
         if (!videoPlayer.paused && $("#enableOcr").is(":checked")) {
