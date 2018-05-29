@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include "components/header.twig" %}
+<body class="bg-light">
+{% include "components/menu.twig" %}
+
+<div class="container container-wide">
+    <div class="row">
+        <div class="col-md-8 col-sm-12 video-player-container">
+            <video id="videoPlayer" autoplay controls controlsList="nodownload" crossorigin="anonymous" class="box-shadow bg-dark w-100"></video>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <h1 class="display-4 series-title">Loading title...</h1>
+            <p class="text-muted"><span class="series-broadcasters"></span> - <span class="series-date"></span></p>
+            <p class="lead series-description">
+                Loading description...
+            </p>
+            <div class="form-group form-check">
+                <label><input type="checkbox" class="form-check-input" id="enableOcr"> Enable experimental hardcoded subtitle translation</label>
+            </div>
+            <img class="series-channel mb-3" style="max-width: 100px" src="">
+        </div>
+    </div>
+</div>
+
+{% include "components/series-modal.twig" %}
+
+<script src="js/vendor.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+    let p = new player();
+    p.load();
+
+    const videoInfo = (callback) => {
+        p.videoInfo(callback);
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "dutch-public-broadcasting",
+  "title": "Dutch Public Broadcasting",
+  "version": "0.0.1",
+  "homepage": "http://koenvh.nl",
+  "author": "Koenvh",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^2.0.10",
+    "gulp-concat": "^2.6.1",
+    "gulp-ext-replace": "^0.3.0",
+    "gulp-header": "^1.8.7",
+    "gulp-less": "^3.1.0",
+    "gulp-nunjucks": "^4.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.4",
+    "gulp-wrap-file": "^0.1.2"
+  },
+  "dependencies": {
+    "bootstrap": "^4.1.1",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.3.1",
+    "nprogress": "^0.2.0",
+    "nunjucks": "^3.1.3"
+  }
+}

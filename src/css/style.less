@@ -1,0 +1,117 @@
+.overview-image {
+  width: 100%;
+  height: 8vw;
+  min-height: 100px;
+  object-fit: cover;
+}
+
+.overflow {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.container-wide {
+  width: 97vw;
+  max-width: 97vw;
+}
+
+.modal-overlay {
+  position: relative;
+}
+
+.modal-overlay-text {
+  position: absolute;
+  left: 10px;
+  bottom: 3px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, .6);
+}
+
+.modal-image {
+  width: 100%;
+  height: 16vw;
+  min-height: 150px;
+  object-fit: cover;
+  filter: brightness(80%);
+}
+
+.modal-episode-image {
+  width: 125px;
+  height: auto;
+  min-height: 70px;
+}
+
+.modal-close {
+  position: absolute;
+  right: 10px;
+  top: 4px;
+}
+
+.series-show {
+  cursor: pointer;
+}
+
+.guide-image {
+  margin: -0.75rem -1.25rem 1rem -1.25rem;
+  width: ~"calc(100% + 2.5rem)";
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
+}
+
+@media (max-device-width: 480px) {
+  .container {
+    width: 100vw;
+    max-width: 100vw;
+  }
+
+  .video-player-container {
+    padding: 0;
+  }
+
+  .display-4 {
+    font-size: 2.5rem;
+  }
+}
