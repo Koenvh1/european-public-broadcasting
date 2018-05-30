@@ -21,14 +21,14 @@ class guide {
                 let getPixelsLength = ((end.getMinutes() + (end.getHours() * 60)) - getPixelsStart);
 
 
-                getPixelsStart *= 30;
-                getPixelsLength *= 30;
+                getPixelsStart *= 15;
+                getPixelsLength *= 15;
 
                 //console.log(getPixelsStart);
                 //console.log(getPixelsLength);
 
                 guideRowContent +=
-                    `<div class="guide-item ` + (schedule[i]["highlighted"] ? "bg-dark" : "") + `" style="left: ` + getPixelsStart + `px; width: ` + getPixelsLength + `px">
+                    `<div class="guide-item" style="left: ` + getPixelsStart + `px; width: ` + getPixelsLength + `px">
                 <span class="overflow">`;
                 if(schedule[i]["program"]["onDemand"]) {
                     guideRowContent += `<a href="player.html?v=` + schedule[i]["program"]["id"] + `"><i class="fa fa-play-circle"></i></a> `;
