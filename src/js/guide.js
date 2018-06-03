@@ -1,14 +1,20 @@
 class guide {
+    constructor() {
+        this.factor = 15;
+    }
+
     async getGuide(date) {
+        NProgress.start();
         let content = await npo.getJson("https://start-api.npo.nl/epg/" + date + "?type=tv");
 
+        let channelContent = "";
         let guideContent = "";
         for(let j = 0; j < content["epg"].length; j++) {
-            guideContent +=
-                `<div class="col-1">
+            channelContent +=
+                `<div class="col-12 position-relative">
                 <img src="` + content["epg"][j]["channel"]["images"]["original"]["formats"]["web"]["source"] + `" style="width: 100px;">
-                </div>
-                <div class="col-11">`;
+                </div>`
+               guideContent += `<div class="col-12 d-block">`;
 
             let schedule = content["epg"][j]["schedule"];
             let guideRowContent = "";
@@ -21,8 +27,8 @@ class guide {
                 let getPixelsLength = ((end.getMinutes() + (end.getHours() * 60)) - getPixelsStart);
 
 
-                getPixelsStart *= 15;
-                getPixelsLength *= 15;
+                getPixelsStart *= this.factor;
+                getPixelsLength *= this.factor;
 
                 //console.log(getPixelsStart);
                 //console.log(getPixelsLength);
@@ -42,7 +48,9 @@ class guide {
             guideContent += guideRowContent;
             guideContent += "</div>";
         }
-        $(".guide").html(guideContent);
+        $(".guide-rows").html(guideContent);
+        $(".guide-channel").html(channelContent);
+        NProgress.done();
     }
 
     padTimeLeft(time) {
@@ -57,6 +65,13 @@ class guide {
         let date = new Date();
         let currentDate = date.getFullYear() + "-" + this.padTimeLeft(date.getMonth() + 1) + "-" + this.padTimeLeft(date.getDate());
         $("#date").val(currentDate);
-        this.getGuide(currentDate);
+        await this.getGuide(currentDate);
+
+        let currentPosition = ((date.getHours() * 60) + date.getMinutes());
+        currentPosition *= this.factor;
+        currentPosition -= 200;
+        if (currentPosition < 0) currentPosition = 0;
+
+        $(".guide-rows").scrollLeft(currentPosition);
     }
 }

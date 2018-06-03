@@ -31,6 +31,7 @@ gulp.task("app-js", function() {
         "src/js/guide.js",
         "src/js/programmes.js",
         "src/js/player.js",
+        "src/js/browser-warning.js",
     ])
         .pipe(concat("app.js"))
         .pipe(gulp.dest("dist/js"))
