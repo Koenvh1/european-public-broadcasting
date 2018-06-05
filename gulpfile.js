@@ -4,7 +4,9 @@ var less = require("gulp-less");
 var wrap = require("gulp-wrap-file");
 var concat = require("gulp-concat");
 var ext_replace = require("gulp-ext-replace");
-var uglify = require("gulp-uglify");
+var uglify_es = require("uglify-es");
+var uglify_composer = require("gulp-uglify/composer");
+var uglify = uglify_composer(uglify_es, console);
 
 gulp.task("app-css", function() {
     return gulp.src(["src/css/style.less"])
@@ -28,9 +30,9 @@ gulp.task("app-js", function() {
         "src/js/npo.js",
         "src/js/index.js",
         "src/js/search.js",
-        "src/js/guide.js",
-        "src/js/programmes.js",
-        "src/js/player.js",
+        "src/js/Guide.js",
+        "src/js/Programmes.js",
+        "src/js/Player.js",
         "src/js/browser-warning.js",
     ])
         .pipe(concat("app.js"))

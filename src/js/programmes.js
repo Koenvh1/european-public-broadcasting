@@ -1,4 +1,4 @@
-class programmes {
+class Programmes {
     constructor() {
         this.filters = {
             az: null,

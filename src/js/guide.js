@@ -1,4 +1,4 @@
-class guide {
+class Guide {
     constructor() {
         this.factor = 15;
     }

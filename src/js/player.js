@@ -1,4 +1,4 @@
-class player {
+class Player {
     constructor() {
         this.videoPlayer = document.querySelector("#videoPlayer");
         this.languages = [
@@ -35,7 +35,8 @@ class player {
             "IT": [],
             "PL": []
         };
-
+        this.series = null;
+        this.seasonId = null;
         this.lastOcr = null;
     }
 
@@ -105,6 +106,13 @@ class player {
             let text = cue.text;
             //console.log(cue.text);
             cue.text = "";
+
+            // Object.defineProperty(cue, 'text', {
+            //     value: await npo.translate(track.language, text);,
+            //     writable: true,
+            //     enumerable: true,
+            //     configurable: true
+            // });
             cue.text = await npo.translate(track.language, text);
         }
     }
@@ -112,7 +120,7 @@ class player {
     getCurrentTrack() {
         let track = null;
         for (let i = 0; i < this.videoPlayer.textTracks.length; i++) {
-            if (videoPlayer.textTracks[i].mode === "showing") {
+            if (this.videoPlayer.textTracks[i].mode === "showing") {
                 track = this.videoPlayer.textTracks[i];
                 break;
             }
@@ -130,9 +138,15 @@ class player {
 
         let videoId = new URL(window.location).searchParams.get("v");
         await this.getVideoUrl(videoId);
+
         let episode = await npo.getJson("https://start-api.npo.nl/page/episode/" + videoId);
+
+        this.series = episode["components"][0]["series"]["id"];
+        this.seasonId = episode["components"][0]["episode"]["seasons"][0]["id"];
+
         episode = episode["components"][0]["episode"];
         $(".series-title").text(episode["title"]);
+        $(".series-episode-title").text(episode["episodeTitle"]);
         $(".series-broadcasters").text(episode["broadcasters"].join(", "));
         $(".series-date").text(`season ` + episode["seasonNumber"] + ` episode ` + episode["episodeNumber"] + ` - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString());
         $(".series-description").html(await npo.translate("EN", episode["description"]));
@@ -189,7 +203,7 @@ class player {
                 }
             }
             */
-            track.addCue(new VTTCue(this.videoPlayer.currentTime, this.videoPlayer.currentTime + 3, translation));
+            track.addCue(new VTTCue(this.videoPlayer.currentTime, this.videoPlayer.currentTime + 2.2, translation));
 
         }
     }
