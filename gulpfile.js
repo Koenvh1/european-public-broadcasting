@@ -19,7 +19,8 @@ gulp.task("vendor-css", function() {
     return gulp.src([
         "node_modules/bootstrap/dist/css/bootstrap.css",
         "node_modules/nprogress/nprogress.css",
-        "node_modules/font-awesome/css/font-awesome.css"
+        "node_modules/font-awesome/css/font-awesome.css",
+        //"node_modules/video.js/dist/video-js.css",
     ])
         .pipe(concat("vendor.css"))
         .pipe(gulp.dest("dist/css"))
@@ -34,6 +35,7 @@ gulp.task("app-js", function() {
         "src/js/Programmes.js",
         "src/js/Player.js",
         "src/js/browser-warning.js",
+        "src/js/language-switcher.js",
     ])
         .pipe(concat("app.js"))
         .pipe(gulp.dest("dist/js"))
@@ -42,8 +44,10 @@ gulp.task("app-js", function() {
 gulp.task("vendor-js", function() {
     return gulp.src([
         "node_modules/jquery/dist/jquery.js",
-        "node_modules/bootstrap/dist/js/bootstrap.js",
+        "node_modules/bootstrap/dist/js/bootstrap.bundle.js",
         "node_modules/nprogress/nprogress.js",
+        "node_modules/l20n/dist/web/l20n.js",
+        //"node_modules/video.js/dist/video.js",
     ])
         .pipe(concat("vendor.js"))
         .pipe(gulp.dest("dist/js"))
@@ -78,12 +82,18 @@ gulp.task("fonts", function() {
         "src/img/*"
     ])
         .pipe(gulp.dest("dist/img"))
+    gulp.src([
+        "src/locales/*"
+    ])
+        .pipe(gulp.dest("dist/locales"))
 });
 
 gulp.task("watch", function () {
    gulp.watch("src/css/style.less", ["app-css"]);
    gulp.watch("src/js/*.js", ["app-js"]);
    gulp.watch("src/*.twig", ["nunjucks"]);
+   gulp.watch("src/img/*", ["fonts"]);
+   gulp.watch("src/locales/*", ["fonts"]);
    gulp.watch("src/components/*.twig", ["nunjucks"]);
 });
 

@@ -56,7 +56,7 @@ class Player {
         document.body.appendChild(script);
 
         let subtitleResponse = await fetch("https://rs.poms.omroep.nl/v1/api/subtitles/" + videoId + "/nl_NL/CAPTION.vtt");
-        let blob = new Blob([(await subtitleResponse.text())]);
+        let blob = new Blob([(await subtitleResponse.text())], {type: "text/vtt"});
         let blobUrl = URL.createObjectURL(blob);
 
         this.languages.forEach(language => {
@@ -73,7 +73,7 @@ class Player {
     async videoInfo(callback) {
         if (callback.errorstring) {
             alert(await
-                npo.translate("EN", callback.errorstring)
+                npo.translate(localStorage.getItem("language") || "EN", callback.errorstring)
             )
         }
         this.videoPlayer.src = callback.url;
@@ -113,6 +113,7 @@ class Player {
             //     enumerable: true,
             //     configurable: true
             // });
+            //track.addCue(new VTTCue(cue.startTime, cue.endTime, await npo.translate(track.language, text)));
             cue.text = await npo.translate(track.language, text);
         }
     }
@@ -132,7 +133,7 @@ class Player {
         NProgress.start();
 
         this.videoPlayer.addEventListener("loadedmetadata", () => {
-            const index = this.languages.findIndex(l => l.code === "EN");
+            let index = this.languages.findIndex(l => l.code === localStorage.getItem("language"));
             this.videoPlayer.textTracks[index].mode = "showing";
         });
 
@@ -142,14 +143,14 @@ class Player {
         let episode = await npo.getJson("https://start-api.npo.nl/page/episode/" + videoId);
 
         this.series = episode["components"][0]["series"]["id"];
-        this.seasonId = episode["components"][0]["episode"]["seasons"][0]["id"];
+        //this.seasonId = episode["components"][0]["episode"]["seasons"][0]["id"];
 
         episode = episode["components"][0]["episode"];
         $(".series-title").text(episode["title"]);
         $(".series-episode-title").text(episode["episodeTitle"]);
         $(".series-broadcasters").text(episode["broadcasters"].join(", "));
         $(".series-date").text(`season ` + episode["seasonNumber"] + ` episode ` + episode["episodeNumber"] + ` - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString());
-        $(".series-description").html(await npo.translate("EN", episode["description"]));
+        $(".series-description").html(await npo.translate(localStorage.getItem("language") || "EN", episode["description"]));
         $(".series-channel").attr("src", "img/" + episode["channel"] + ".svg");
 
         setInterval(async () => {

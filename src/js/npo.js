@@ -22,7 +22,7 @@ class npo {
             }
         };
 
-        const translationResponse = await fetch("translate.php", {
+        const translationResponse = await fetch("https://cors-anywhere.herokuapp.com/https://www.deepl.com/jsonrpc", {
             method: "POST",
             body: JSON.stringify(payload)
         });
@@ -61,10 +61,12 @@ class npo {
 
         let intermediate = (await response.json())["responses"][0];
         if (intermediate.hasOwnProperty("textAnnotations")) {
-            return intermediate["textAnnotations"][0]["description"];
-        } else {
-            return null;
+            let annotation = intermediate["textAnnotations"][0];
+            if ((annotation["boundingPoly"]["vertices"][2]["y"] - annotation["boundingPoly"]["vertices"][0]["y"]) > 25) {
+                return annotation["description"];
+            }
         }
+        return null;
     }
 
     static async getJson(url) {

@@ -69,7 +69,7 @@ class Programmes {
         $(".series-image").attr("src", image);
         $(".series-title").text(serie["title"]);
         $(".series-description").html(await
-            npo.translate("EN", serie["description"])
+            npo.translate(localStorage.getItem("language") || "EN", serie["description"])
         )
         ;
         $(".series-broadcasters").text(serie["broadcasters"].join(", "));
