@@ -134,6 +134,7 @@ class Player {
 
         this.videoPlayer.addEventListener("loadedmetadata", () => {
             let index = this.languages.findIndex(l => l.code === localStorage.getItem("language"));
+            if (index < 0) index = 1;
             this.videoPlayer.textTracks[index].mode = "showing";
         });
 
