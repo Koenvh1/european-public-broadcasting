@@ -46,7 +46,7 @@ gulp.task("vendor-js", function() {
         "node_modules/jquery/dist/jquery.js",
         "node_modules/bootstrap/dist/js/bootstrap.bundle.js",
         "node_modules/nprogress/nprogress.js",
-        "node_modules/l20n/dist/web/l20n.js",
+        //"node_modules/l20n/dist/web/l20n.js",
         //"node_modules/video.js/dist/video.js",
     ])
         .pipe(concat("vendor.js"))
