@@ -22,7 +22,7 @@ class npo {
             }
         };
 
-        const translationResponse = await fetch("https://cors-anywhere.herokuapp.com/https://www.deepl.com/jsonrpc", {
+        const translationResponse = await fetch("https://cors-anywhere.herokuapp.com/https://www2.deepl.com/jsonrpc", {
             method: "POST",
             body: JSON.stringify(payload)
         });
