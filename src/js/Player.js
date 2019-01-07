@@ -1,6 +1,7 @@
 class Player {
     constructor() {
         this.videoPlayer = document.querySelector("#videoPlayer");
+        this.language = localStorage.getItem("language") || "en";
         this.languages = Object.entries(npo.getLanguages()).map(lang => {
             return {
                 code: lang[0],
@@ -66,15 +67,13 @@ class Player {
         let blob = new Blob([(await subtitleResponse.text())], {type: "text/vtt"});
         let blobUrl = URL.createObjectURL(blob);
 
-        this.languages.forEach(language => {
-            let track = document.createElement("track");
-            track.kind = "subtitles";
-            track.label = language.name;
-            track.srclang = language.code;
-            track.src = blobUrl;
+        let track = document.createElement("track");
+        track.kind = "subtitles";
+        track.label = this.languages.find(l => l.code === this.language).name;
+        track.srclang = this.language;
+        track.src = blobUrl;
 
-            this.videoPlayer.appendChild(track);
-        });
+        this.videoPlayer.appendChild(track);
     }
 
     async videoInfo(callback) {
@@ -140,9 +139,7 @@ class Player {
         NProgress.start();
 
         this.videoPlayer.addEventListener("loadedmetadata", () => {
-            let index = this.languages.findIndex(l => l.code === localStorage.getItem("language"));
-            if (index < 0) index = 1;
-            this.videoPlayer.textTracks[index].mode = "showing";
+            this.videoPlayer.textTracks[0].mode = "showing";
         });
 
         let videoId = new URL(window.location).searchParams.get("v");
