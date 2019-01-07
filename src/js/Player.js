@@ -1,40 +1,47 @@
 class Player {
     constructor() {
         this.videoPlayer = document.querySelector("#videoPlayer");
-        this.languages = [
-            {
-                code: "DE",
-                name: "Deutsch"
-            },
-            {
-                code: "EN",
-                name: "English"
-            },
-            {
-                code: "ES",
-                name: "Español"
-            },
-            {
-                code: "FR",
-                name: "français"
-            },
-            {
-                code: "IT",
-                name: "Italiano"
-            },
-            {
-                code: "PL",
-                name: "Polski"
-            },
-        ];
-        this.translated = {
-            "DE": [],
-            "EN": [],
-            "ES": [],
-            "FR": [],
-            "IT": [],
-            "PL": []
-        };
+        this.languages = Object.entries(npo.getLanguages()).map(lang => {
+            return {
+                code: lang[0],
+                name: lang[1],
+            }
+        });
+        this.translated = Object.entries(npo.getLanguages()).reduce((map, lang) => (map[lang[0]] = [], map), {});
+        // this.languages = [
+        //     {
+        //         code: "DE",
+        //         name: "Deutsch"
+        //     },
+        //     {
+        //         code: "EN",
+        //         name: "English"
+        //     },
+        //     {
+        //         code: "ES",
+        //         name: "Español"
+        //     },
+        //     {
+        //         code: "FR",
+        //         name: "français"
+        //     },
+        //     {
+        //         code: "IT",
+        //         name: "Italiano"
+        //     },
+        //     {
+        //         code: "PL",
+        //         name: "Polski"
+        //     },
+        // ];
+        // this.translated = {
+        //     "DE": [],
+        //     "EN": [],
+        //     "ES": [],
+        //     "FR": [],
+        //     "IT": [],
+        //     "PL": []
+        // };
         this.series = null;
         this.seasonId = null;
         this.lastOcr = null;
