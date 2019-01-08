@@ -46,6 +46,9 @@ class Player {
         this.series = null;
         this.seasonId = null;
         this.lastOcr = null;
+
+        this.customVideoUrl = null;
+        this.customCaptionUrl = null;
     }
 
     async getVideoUrl(videoId) {
@@ -63,7 +66,11 @@ class Player {
         script.src = url;
         document.body.appendChild(script);
 
-        let subtitleResponse = await fetch("https://rs.poms.omroep.nl/v1/api/subtitles/" + videoId + "/nl_NL/CAPTION.vtt");
+        await this.loadSubtitles("https://rs.poms.omroep.nl/v1/api/subtitles/" + videoId + "/nl_NL/CAPTION.vtt");
+    }
+
+    async loadSubtitles(url) {
+        let subtitleResponse = await fetch(url);
         let blob = new Blob([(await subtitleResponse.text())], {type: "text/vtt"});
         let blobUrl = URL.createObjectURL(blob);
 
@@ -96,7 +103,7 @@ class Player {
             // Make sure it has an ID, and is not OCR
             if (!cues[i].id) continue;
             // Get the next five that have NOT been translated yet.
-            if (this.translated[track.language].includes(cues[i].id)) continue;
+            if (this.translated[this.language].includes(cues[i].id)) continue;
 
             newItems.push(i);
         }
@@ -107,20 +114,20 @@ class Player {
             const cue = cues[i];
 
             if (!cue.text) return; // Cue text can be empty on mistake (when still processing), skip it then.
-            this.translated[track.language].push(cue.id); // Mark this as translated.
+            this.translated[this.language].push(cue.id); // Mark this as translated.
 
             let text = cue.text;
             //console.log(cue.text);
             cue.text = "";
 
             // Object.defineProperty(cue, 'text', {
-            //     value: await npo.translate(track.language, text);,
+            //     value: await npo.translate(this.language, text);,
             //     writable: true,
             //     enumerable: true,
             //     configurable: true
             // });
-            //track.addCue(new VTTCue(cue.startTime, cue.endTime, await npo.translate(track.language, text)));
-            cue.text = await npo.translate(track.language, text);
+            //track.addCue(new VTTCue(cue.startTime, cue.endTime, await npo.translate(this.language, text)));
+            cue.text = await npo.translate(this.language, text);
         }
     }
 
@@ -141,22 +148,47 @@ class Player {
         this.videoPlayer.addEventListener("loadedmetadata", () => {
             this.videoPlayer.textTracks[0].mode = "showing";
         });
+        const searchParams = new URL(window.location).searchParams;
+        let videoId = searchParams.get("v");
+        this.customVideoUrl = searchParams.get("videoUrl");
+        this.customCaptionUrl = searchParams.get("captionUrl");
+        if (!this.customVideoUrl) {
+            await this.getVideoUrl(videoId);
 
-        let videoId = new URL(window.location).searchParams.get("v");
-        await this.getVideoUrl(videoId);
+            let episode = await npo.getJson("https://start-api.npo.nl/page/episode/" + videoId);
 
-        let episode = await npo.getJson("https://start-api.npo.nl/page/episode/" + videoId);
+            this.series = episode["components"][0]["series"]["id"];
+            //this.seasonId = episode["components"][0]["episode"]["seasons"][0]["id"];
 
-        this.series = episode["components"][0]["series"]["id"];
-        //this.seasonId = episode["components"][0]["episode"]["seasons"][0]["id"];
+            episode = episode["components"][0]["episode"];
+            $(".series-title").text(episode["title"]);
+            $(".series-episode-title").text(episode["episodeTitle"]);
+            $(".series-broadcasters").text(episode["broadcasters"].join(", "));
+            $(".series-date").text(`season ` + episode["seasonNumber"] + ` episode ` + episode["episodeNumber"] + ` - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString());
+            $(".series-description").html(await npo.translate(localStorage.getItem("language") || "EN", episode["description"]));
+            $(".series-channel").attr("src", "img/" + episode["channel"] + ".svg");
+        } else {
+            if (this.customVideoUrl.indexOf(".m3u8") !== -1) {
+                if(Hls.isSupported()) {
+                    const hls = new Hls();
+                    hls.loadSource(this.customVideoUrl);
+                    hls.attachMedia(this.videoPlayer);
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+                }
+            } else {
+                this.videoPlayer.src = this.customVideoUrl;
+            }
+            if (this.customCaptionUrl) {
+                await this.loadSubtitles(this.customCaptionUrl);
+            }
 
-        episode = episode["components"][0]["episode"];
-        $(".series-title").text(episode["title"]);
-        $(".series-episode-title").text(episode["episodeTitle"]);
-        $(".series-broadcasters").text(episode["broadcasters"].join(", "));
-        $(".series-date").text(`season ` + episode["seasonNumber"] + ` episode ` + episode["episodeNumber"] + ` - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString());
-        $(".series-description").html(await npo.translate(localStorage.getItem("language") || "EN", episode["description"]));
-        $(".series-channel").attr("src", "img/" + episode["channel"] + ".svg");
+            $(".series-title").text("Unavailable");
+            $(".series-episode-title").text("Unavailable");
+            $(".series-broadcasters").text("Unavailable");
+            $(".series-date").text("Unavailable");
+            $(".series-description").text("Unavailable");
+            $(".series-channel").text("Unavailable");
+        }
 
         setInterval(async () => {
             let track = this.getCurrentTrack();
@@ -197,7 +229,7 @@ class Player {
         if (response != null && this.lastOcr !== response) {
             this.lastOcr = response;
             const track = this.getCurrentTrack();
-            let translation = await npo.translate(track.language, response);
+            let translation = await npo.translate(this.language, response);
             //console.log(translation);
 
             /*

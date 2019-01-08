@@ -19,5 +19,5 @@ $tr = new \Stichoza\GoogleTranslate\TranslateClient();
 $params = json_decode(file_get_contents("php://input"), true);
 
 echo json_encode([
-    "result" => $tr->setSource("nl")->setTarget($params["target"])->translate($params["text"])
+    "result" => $tr->setTarget($params["target"])->translate($params["text"])
 ]);
