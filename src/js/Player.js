@@ -132,14 +132,15 @@ class Player {
     }
 
     getCurrentTrack() {
-        let track = null;
-        for (let i = 0; i < this.videoPlayer.textTracks.length; i++) {
-            if (this.videoPlayer.textTracks[i].mode === "showing") {
-                track = this.videoPlayer.textTracks[i];
-                break;
-            }
-        }
-        return track;
+        return this.videoPlayer.textTracks[0];
+        // let track = null;
+        // for (let i = 0; i < this.videoPlayer.textTracks.length; i++) {
+        //     if (this.videoPlayer.textTracks[i].mode === "showing") {
+        //         track = this.videoPlayer.textTracks[i];
+        //         break;
+        //     }
+        // }
+        // return track;
     }
 
     async load() {
@@ -147,6 +148,14 @@ class Player {
 
         this.videoPlayer.addEventListener("loadedmetadata", () => {
             this.videoPlayer.textTracks[0].mode = "showing";
+        });
+
+        this.videoPlayer.addEventListener("canplay", () => {
+            if (this.getCurrentTrack().cues[0].id === "") {
+                for (let i = 0; i < this.getCurrentTrack().cues.length; i++) {
+                    this.getCurrentTrack().cues[i].id = i;
+                }
+            }
         });
         const searchParams = new URL(window.location).searchParams;
         let videoId = searchParams.get("v");
@@ -168,6 +177,9 @@ class Player {
             $(".series-description").html(await npo.translate(localStorage.getItem("language") || "EN", episode["description"]));
             $(".series-channel").attr("src", "img/" + episode["channel"] + ".svg");
         } else {
+            if (this.customCaptionUrl) {
+                await this.loadSubtitles(this.customCaptionUrl);
+            }
             if (this.customVideoUrl.indexOf(".m3u8") !== -1) {
                 if(Hls.isSupported()) {
                     const hls = new Hls();
@@ -176,10 +188,10 @@ class Player {
                     hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
                 }
             } else {
+                if (this.customVideoUrl.indexOf(".mpd") !== -1) {
+                    this.videoPlayer.setAttribute("data-dashjs-player", "");
+                }
                 this.videoPlayer.src = this.customVideoUrl;
-            }
-            if (this.customCaptionUrl) {
-                await this.loadSubtitles(this.customCaptionUrl);
             }
 
             $(".series-title").text("Unavailable");
