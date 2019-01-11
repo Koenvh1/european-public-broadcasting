@@ -5,7 +5,7 @@ class Guide {
 
     async getGuide(date) {
         NProgress.start();
-        let content = await npo.getJson("https://start-api.npo.nl/epg/" + date + "?type=tv");
+        let content = await Utils.getJson("https://start-api.npo.nl/epg/" + date + "?type=tv");
 
         let channelContent = "";
         let guideContent = "";

@@ -1,4 +1,4 @@
-class npo {
+class Utils {
     static async translate(language, text) {
         // const payload = {
         //     "id": 91510002,

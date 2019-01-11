@@ -57,7 +57,7 @@ class Programmes {
     async showSeriesModal(id) {
         NProgress.start();
         let data = await
-            npo.getJson("https://start-api.npo.nl/page/franchise/" + id + "?page=10000");
+            Utils.getJson("https://start-api.npo.nl/page/franchise/" + id + "?page=10000");
         let serie = data["components"][0]["series"];
         let image = "";
         if (serie.images != null && serie.images.header != null && serie.images.header.formats != null && serie.images.header.formats.web != null) {
@@ -69,7 +69,7 @@ class Programmes {
         $(".series-image").attr("src", image);
         $(".series-title").text(serie["title"]);
         $(".series-description").html(await
-            npo.translate(localStorage.getItem("language") || "EN", serie["description"])
+            Utils.translate(localStorage.getItem("language") || "EN", serie["description"])
         )
         ;
         $(".series-broadcasters").text(serie["broadcasters"].join(", "));
@@ -131,7 +131,7 @@ class Programmes {
     async showSeriesCollection(firstRun) {
         NProgress.start();
         let catalogue = await
-            npo.getJson("https://start-api.npo.nl/page/catalogue?" + $.param(this.removeEmpty(this.filters)));
+            Utils.getJson("https://start-api.npo.nl/page/catalogue?" + $.param(this.removeEmpty(this.filters)));
 
         if (firstRun) {
             let filterAz = catalogue["components"][0]["filters"][0]["options"];
@@ -171,19 +171,19 @@ class Programmes {
 
     async switchSeasonUrl(url) {
         let data = await
-            npo.getJson(url);
+            Utils.getJson(url);
         this.renderEpisodes(data);
     }
 
     async switchSeason(id, season) {
         let data = await
-            npo.getJson("https://start-api.npo.nl/media/series/" + id + "/episodes?seasonId=" + season);
+            Utils.getJson("https://start-api.npo.nl/media/series/" + id + "/episodes?seasonId=" + season);
         this.renderEpisodes(data);
     }
 
     async search(term) {
         let data = await
-            npo.getJson("https://start-api.npo.nl/search?pageSize=24&page=1&query=" + encodeURIComponent(term));
+            Utils.getJson("https://start-api.npo.nl/search?pageSize=24&page=1&query=" + encodeURIComponent(term));
         $(".close-search-results").show();
         this.renderSeries(data["items"]);
     }

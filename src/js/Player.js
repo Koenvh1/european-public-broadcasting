@@ -2,47 +2,14 @@ class Player {
     constructor() {
         this.videoPlayer = document.querySelector("#videoPlayer");
         this.language = localStorage.getItem("language") || "en";
-        this.languages = Object.entries(npo.getLanguages()).map(lang => {
+        this.languages = Object.entries(Utils.getLanguages()).map(lang => {
             return {
                 code: lang[0],
                 name: lang[1],
             }
         });
-        this.translated = Object.entries(npo.getLanguages()).reduce((map, lang) => (map[lang[0]] = [], map), {});
-        // this.languages = [
-        //     {
-        //         code: "DE",
-        //         name: "Deutsch"
-        //     },
-        //     {
-        //         code: "EN",
-        //         name: "English"
-        //     },
-        //     {
-        //         code: "ES",
-        //         name: "Español"
-        //     },
-        //     {
-        //         code: "FR",
-        //         name: "français"
-        //     },
-        //     {
-        //         code: "IT",
-        //         name: "Italiano"
-        //     },
-        //     {
-        //         code: "PL",
-        //         name: "Polski"
-        //     },
-        // ];
-        // this.translated = {
-        //     "DE": [],
-        //     "EN": [],
-        //     "ES": [],
-        //     "FR": [],
-        //     "IT": [],
-        //     "PL": []
-        // };
+        this.translated = Object.entries(Utils.getLanguages()).reduce((map, lang) => (map[lang[0]] = [], map), {});
+
         this.series = null;
         this.seasonId = null;
         this.lastOcr = null;
@@ -86,7 +53,7 @@ class Player {
     async videoInfo(callback) {
         if (callback.errorstring) {
             alert(await
-                npo.translate(localStorage.getItem("language") || "EN", callback.errorstring)
+                Utils.translate(localStorage.getItem("language") || "EN", callback.errorstring)
             )
         }
         this.videoPlayer.src = callback.url;
@@ -127,7 +94,7 @@ class Player {
             //     configurable: true
             // });
             //track.addCue(new VTTCue(cue.startTime, cue.endTime, await npo.translate(this.language, text)));
-            cue.text = await npo.translate(this.language, text);
+            cue.text = await Utils.translate(this.language, text);
         }
     }
 
@@ -164,7 +131,7 @@ class Player {
         if (!this.customVideoUrl) {
             await this.getVideoUrl(videoId);
 
-            let episode = await npo.getJson("https://start-api.npo.nl/page/episode/" + videoId);
+            let episode = await Utils.getJson("https://start-api.npo.nl/page/episode/" + videoId);
 
             this.series = episode["components"][0]["series"]["id"];
             //this.seasonId = episode["components"][0]["episode"]["seasons"][0]["id"];
@@ -173,8 +140,8 @@ class Player {
             $(".series-title").text(episode["title"]);
             $(".series-episode-title").text(episode["episodeTitle"]);
             $(".series-broadcasters").text(episode["broadcasters"].join(", "));
-            $(".series-date").text(`season ` + episode["seasonNumber"] + ` episode ` + episode["episodeNumber"] + ` - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString());
-            $(".series-description").html(await npo.translate(localStorage.getItem("language") || "EN", episode["description"]));
+            $(".series-date").text(`season ${episode["seasonNumber"]} episode ${episode["episodeNumber"]} - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString());
+            $(".series-description").html(await Utils.translate(localStorage.getItem("language") || "EN", episode["description"]));
             $(".series-channel").attr("src", "img/" + episode["channel"] + ".svg");
         } else {
             if (this.customCaptionUrl) {
@@ -226,22 +193,22 @@ class Player {
     async ocr() {
         let canvas = document.createElement("canvas");
         let w = this.videoPlayer.videoWidth;
-        let h = Math.round(videoPlayer.videoHeight / 4);
+        let h = Math.round(this.videoPlayer.videoHeight / 4);
         canvas.width = w;
         canvas.height = h;
 
         let context = canvas.getContext("2d");
-        context.drawImage(videoPlayer, 0, h * 3, w, h, 0, 0, w, h);
+        context.drawImage(this.videoPlayer, 0, h * 3, w, h, 0, 0, w, h);
         let image = canvas.toDataURL("image/png");
 
         $("#ocr").attr("src", image);
 
         image = image.split(",")[1];
-        let response = await npo.ocr(image);
+        let response = await Utils.ocr(image);
         if (response != null && this.lastOcr !== response) {
             this.lastOcr = response;
             const track = this.getCurrentTrack();
-            let translation = await npo.translate(this.language, response);
+            let translation = await Utils.translate(this.language, response);
             //console.log(translation);
 
             /*

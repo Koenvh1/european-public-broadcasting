@@ -1,12 +1,12 @@
-var gulp = require("gulp");
-var nunjucks = require("gulp-nunjucks");
-var less = require("gulp-less");
-var wrap = require("gulp-wrap-file");
-var concat = require("gulp-concat");
-var ext_replace = require("gulp-ext-replace");
-var uglify_es = require("uglify-es");
-var uglify_composer = require("gulp-uglify/composer");
-var uglify = uglify_composer(uglify_es, console);
+const gulp = require("gulp");
+const nunjucks = require("gulp-nunjucks");
+const less = require("gulp-less");
+const wrap = require("gulp-wrap-file");
+const concat = require("gulp-concat");
+const ext_replace = require("gulp-ext-replace");
+const uglify_es = require("uglify-es");
+const uglify_composer = require("gulp-uglify/composer");
+const uglify = uglify_composer(uglify_es, console);
 
 gulp.task("app-css", function() {
     return gulp.src(["src/css/style.less"])
@@ -28,14 +28,14 @@ gulp.task("vendor-css", function() {
 
 gulp.task("app-js", function() {
     return gulp.src([
-        "src/js/npo.js",
+        "src/js/Utils.js",
         "src/js/index.js",
-        "src/js/search.js",
         "src/js/Guide.js",
         "src/js/Programmes.js",
         "src/js/Player.js",
         "src/js/browser-warning.js",
         "src/js/language-switcher.js",
+        "src/js/providers/*",
     ])
         .pipe(concat("app.js"))
         .pipe(gulp.dest("dist/js"))
@@ -91,6 +91,7 @@ gulp.task("fonts", function() {
 gulp.task("watch", function () {
    gulp.watch("src/css/style.less", ["app-css"]);
    gulp.watch("src/js/*.js", ["app-js"]);
+   gulp.watch("src/js/providers/*.js", ["app-js"]);
    gulp.watch("src/*.twig", ["nunjucks"]);
    gulp.watch("src/img/*", ["fonts"]);
    gulp.watch("src/locales/*", ["fonts"]);
