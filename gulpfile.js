@@ -74,7 +74,7 @@ gulp.task("nunjucks", function () {
 });
 
 // Copy vendor libraries from /node_modules into /vendor
-gulp.task("fonts", function() {
+gulp.task("static", function() {
     gulp.src([
         "node_modules/font-awesome/fonts/*"
     ]).pipe(gulp.dest("dist/fonts"));
@@ -85,6 +85,9 @@ gulp.task("fonts", function() {
         "src/favicon.ico"
     ]).pipe(gulp.dest("dist"));
     gulp.src([
+        "src/vendor/**"
+    ]).pipe(gulp.dest("dist/vendor"));
+    gulp.src([
         "src/*.php"
     ]).pipe(gulp.dest("dist"));
 });
@@ -94,11 +97,12 @@ gulp.task("watch", function () {
    gulp.watch("src/js/*.js", ["app-js"]);
    gulp.watch("src/js/providers/*.js", ["app-js"]);
    gulp.watch("src/*.twig", ["nunjucks"]);
-   gulp.watch("src/img/*", ["fonts"]);
-   gulp.watch("src/locales/*", ["fonts"]);
+   gulp.watch("src/*.php", ["static"]);
+   gulp.watch("src/img/*", ["static"]);
+   gulp.watch("src/locales/*", ["static"]);
    gulp.watch("src/components/*.twig", ["nunjucks"]);
 });
 
 // Run everything
-gulp.task("default", ["app-css", "vendor-css", "app-js", "vendor-js", "nunjucks", "fonts", "watch"]);
-gulp.task("release", ["app-css", "vendor-css", "uglify-app-js", "uglify-vendor-js", "nunjucks", "fonts"]);
+gulp.task("default", ["app-css", "vendor-css", "app-js", "vendor-js", "nunjucks", "static", "watch"]);
+gulp.task("release", ["app-css", "vendor-css", "uglify-app-js", "uglify-vendor-js", "nunjucks", "static"]);

@@ -103,7 +103,7 @@ class Player {
         });
 
         this.videoPlayer.addEventListener("canplay", () => {
-            if (this.getCurrentTrack().cues[0].id === "") {
+            if (isNaN(this.getCurrentTrack().cues[0].id)) {
                 for (let i = 0; i < this.getCurrentTrack().cues.length; i++) {
                     this.getCurrentTrack().cues[i].id = i;
                 }
