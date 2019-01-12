@@ -30,6 +30,7 @@ gulp.task("app-js", function() {
     return gulp.src([
         "src/js/Utils.js",
         "src/js/index.js",
+        "src/js/Broadcaster.js",
         "src/js/Guide.js",
         "src/js/Programmes.js",
         "src/js/Player.js",
@@ -76,16 +77,16 @@ gulp.task("nunjucks", function () {
 gulp.task("fonts", function() {
     gulp.src([
         "node_modules/font-awesome/fonts/*"
-    ])
-        .pipe(gulp.dest("dist/fonts"));
+    ]).pipe(gulp.dest("dist/fonts"));
     gulp.src([
         "src/img/*"
-    ])
-        .pipe(gulp.dest("dist/img"))
+    ]).pipe(gulp.dest("dist/img"));
     gulp.src([
-        "src/locales/*"
-    ])
-        .pipe(gulp.dest("dist/locales"))
+        "src/favicon.ico"
+    ]).pipe(gulp.dest("dist"));
+    gulp.src([
+        "src/*.php"
+    ]).pipe(gulp.dest("dist"));
 });
 
 gulp.task("watch", function () {

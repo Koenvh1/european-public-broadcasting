@@ -83,31 +83,16 @@ class Player {
             if (!cue.text) return; // Cue text can be empty on mistake (when still processing), skip it then.
             this.translated[this.language].push(cue.id); // Mark this as translated.
 
-            let text = cue.text;
+            let text = cue.text.replace(/\s\s+/g, ' '); // Without multiple spaces
             //console.log(cue.text);
             cue.text = "";
 
-            // Object.defineProperty(cue, 'text', {
-            //     value: await npo.translate(this.language, text);,
-            //     writable: true,
-            //     enumerable: true,
-            //     configurable: true
-            // });
-            //track.addCue(new VTTCue(cue.startTime, cue.endTime, await npo.translate(this.language, text)));
             cue.text = await Utils.translate(this.language, text);
         }
     }
 
     getCurrentTrack() {
         return this.videoPlayer.textTracks[0];
-        // let track = null;
-        // for (let i = 0; i < this.videoPlayer.textTracks.length; i++) {
-        //     if (this.videoPlayer.textTracks[i].mode === "showing") {
-        //         track = this.videoPlayer.textTracks[i];
-        //         break;
-        //     }
-        // }
-        // return track;
     }
 
     async load() {
@@ -124,10 +109,24 @@ class Player {
                 }
             }
         });
+
+        this.videoPlayer.addEventListener("error", (e) => {
+            console.log(this.videoPlayer.error.message);
+        });
         const searchParams = new URL(window.location).searchParams;
         let videoId = searchParams.get("v");
         this.customVideoUrl = searchParams.get("videoUrl");
         this.customCaptionUrl = searchParams.get("captionUrl");
+        let broadcaster = searchParams.get("broadcaster");
+        if (broadcaster) {
+            try {
+                let urls = await Broadcaster.parseUrl(broadcaster, this.customVideoUrl);
+                this.customVideoUrl = urls.video;
+                this.customCaptionUrl = urls.subtitles;
+            } catch (e) {
+                alert(e);
+            }
+        }
         if (!this.customVideoUrl) {
             await this.getVideoUrl(videoId);
 
@@ -152,13 +151,15 @@ class Player {
                     const hls = new Hls();
                     hls.loadSource(this.customVideoUrl);
                     hls.attachMedia(this.videoPlayer);
-                    hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => this.videoPlayer.play());
                 }
             } else {
-                if (this.customVideoUrl.indexOf(".mpd") !== -1) {
-                    this.videoPlayer.setAttribute("data-dashjs-player", "");
+                if (this.customVideoUrl.indexOf(".mpd") !== -1 || this.customVideoUrl.indexOf("dash") !== -1) {
+                    const dashjsPlayer = dashjs.MediaPlayer().create();
+                    dashjsPlayer.initialize(this.videoPlayer, this.customVideoUrl, true);
+                } else {
+                    this.videoPlayer.src = this.customVideoUrl;
                 }
-                this.videoPlayer.src = this.customVideoUrl;
             }
 
             $(".series-title").text("Unavailable");
