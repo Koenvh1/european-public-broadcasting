@@ -175,7 +175,7 @@ function tvp()
     $id = $output_array[1][0];
     $response = $client->request("GET", "https://vod.tvp.pl/sess/tvplayer.php?object_id=$id&autoplay=true&nextprev=1");
     $body = $response->getBody()->getContents();
-    preg_match_all('/\'(.+\.m3u8)\'/', $body, $output_array);
+    preg_match_all('/\'(.+\.mp4)\'/', $body, $output_array);
     $video = $output_array[1][0];
     preg_match_all('/"(.+\.xml)"/', $body, $output_array);
     $subtitles = file_get_contents("https:" . $output_array[1][0]);
