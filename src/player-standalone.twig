@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 {% include "components/header.twig" %}
-<body class="bg-light" style="overflow: hidden">
+<body class="bg-white" style="overflow: hidden">
 <video id="videoPlayer" autoplay controls data-dashjs-player controlsList="nodownload" crossorigin="anonymous" class="box-shadow" style="width: 100vw; height: 100vh; background: black"></video>
-<div class="position-fixed bg-white" style="top: 5px; left: 5px;">
+<div class="position-fixed bg-light p-1" style="top: 0; left: 0; border-bottom-right-radius: 3px">
     <a href="player-open.html" class="text-dark px-1">Back</a>
 </div>
 
-<div class="position-fixed bg-white" style="top: 5px; right: 5px;">
+<div class="position-fixed bg-white p-1 " style="top: 0; right: 0; border-bottom-left-radius: 3px">
     <span class="dropdown">
         <a class="p-2 text-dark dropdown-toggle" href="#" data-toggle="dropdown">Language</a>
         <div class="dropdown-menu box-shadow languages">

@@ -129,6 +129,12 @@ function nrk()
     $data = json_decode($response->getBody(), true);
     $video = str_replace("http://", "https://", $data["mediaAssetsOnDemand"][0]["hlsUrl"]);
     $subtitles = "https://undertekst.nrk.no/prod/" . substr($id, 0, 6) . "/00/$id/TTV/$id.vtt";
+    $response = $client->request("GET", $subtitles, [
+        "http_errors" => false
+    ]);
+    if ($response->getStatusCode() >= 400) {
+        $subtitles = "https://undertekst.nrk.no/prod/" . substr($id, 0, 6) . "/00/$id/NOR/$id.vtt";
+    }
 
     echo json_encode([
         "subtitles" => $subtitles,

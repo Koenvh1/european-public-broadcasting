@@ -7,12 +7,15 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-12">
-            <h1>Automatically translate a custom video:</h1>
+            <h1>Other broadcasters <small><span class="badge badge-primary">Beta</span></small></h1>
             <p class="lead">
-                Enter a custom video URL and caption URL to automatically translate the video. This feature is very much in alpha, and is not stable.
+                Dutch Public Broadcasting has beta support for videos from other public broadcasters.
+                This means that you can have subtitles translated for for example Danish or Norwegian television.
+                Please check beforehand that the video actually has subtitles.
             </p>
         </div>
         <div class="col-md-6 col-sm-12">
+            <h3>Automatic parsing</h3>
             <form method="get" action="player-standalone.html">
                 <div class="form-group mb-2">
                     <select class="form-control" name="broadcaster" required>
@@ -34,6 +37,7 @@
             </form>
         </div>
         <div class="col-md-6 col-sm-12">
+            <h3>Manual URL entry</h3>
             <form method="get" action="player-standalone.html">
                 <div class="form-group mb-2">
                     <input type="url" class="form-control" id="videoUrl" name="videoUrl" placeholder="Video URL">
