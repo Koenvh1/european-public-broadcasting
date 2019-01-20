@@ -142,6 +142,41 @@ function nrk()
     ]);
 }
 
+function rtbf()
+{
+    global $client, $url;
+    preg_match_all('/id=(\d+)/', $url, $output_array);
+    $id = $output_array[1][0];
+    $response = $client->request("GET", "https://www.rtbf.be/auvio/embed/media?id=$id&autoplay=1");
+    preg_match_all('/data-media="(.+?)"/', $response->getBody(), $output_array);
+    $data = $output_array[1][0];
+    $data = html_entity_decode($data);
+    $data = json_decode($data, true);
+    $video = $data["urlHls"];
+    $subtitles = $data["tracks"]["fsm"]["url"];
+
+    echo json_encode([
+        "subtitles" => $subtitles,
+        "video" => $video
+    ]);
+}
+
+function rts()
+{
+    global $client, $url;
+    preg_match_all('/id=(\d+)/', $url, $output_array);
+    $id = $output_array[1][0];
+    $response = $client->request("GET", "https://il.srgssr.ch/integrationlayer/2.0/mediaComposition/byUrn/urn:rts:video:$id.json?onlyChapters=true&vector=portalplay");
+    $data = json_decode($response->getBody(), true);
+    $video = $data["chapterList"][0]["resourceList"][0]["url"];
+    $subtitles = $data["chapterList"][0]["subtitleList"][0]["url"];
+
+    echo json_encode([
+        "subtitles" => $subtitles,
+        "video" => $video
+    ]);
+}
+
 function svt()
 {
     global $client, $url;
@@ -211,6 +246,39 @@ function tvp()
     ]);
 }
 
+function yle()
+{
+    global $client, $url;
+    preg_match_all('/(1-\d+)/', $url, $output_array);
+    $id = $output_array[1][0];
+    $response = $client->request("GET", "https://external.api.yle.fi/v1/programs/items/$id.json?app_id=b7a3c2a4&app_key=fe3bfffe34a6ae2e3b972af1a4bf1592");
+    $data = json_decode($response->getBody(), true);
+    $publicationEvent = null;
+    foreach ($data["data"]["publicationEvent"] as $item) {
+        if (isset($item["media"])) {
+            $publicationEvent = $item;
+            break;
+        }
+    }
+    $mediaId = $publicationEvent["media"]["id"];
+    $response = $client->request("GET", "https://external.api.yle.fi/v1/media/playouts.json?program_id=$id&media_id=$mediaId&protocol=HLS&app_id=b7a3c2a4&app_key=fe3bfffe34a6ae2e3b972af1a4bf1592");
+    $data = json_decode($response->getBody(), true);
+    //$subtitles = $data["data"][0]["subtitles"][0]["uri"];
+    $video = $data["data"][0]["url"];
+
+    $decryptKey = "7895f030eea0ba81";
+    $tmp = base64_decode($video);
+    $tmp = mcrypt_decrypt(MCRYPT_RIJNDAEL_128, $decryptKey, substr($tmp, 16), MCRYPT_MODE_CBC, substr($tmp, 0, 16));
+    $video = substr($tmp, 0, -ord($tmp[strlen($tmp)-1]));
+
+    $response = $client->request("GET", "https://external.api.yle.fi/v1/tracking/streamstart?program_id=$id&media_id=$mediaId&app_id=b7a3c2a4&app_key=fe3bfffe34a6ae2e3b972af1a4bf1592");
+
+    echo json_encode([
+        "subtitles" => "",
+        "video" => $video
+    ]);
+}
+
 function zdf()
 {
     global $client, $url;
@@ -257,11 +325,20 @@ switch ($_GET["broadcaster"]) {
     case "nrk":
         nrk();
         break;
+    case "rtbf":
+        rtbf();
+        break;
+    case "rts":
+        rts();
+        break;
     case "svt":
         svt();
         break;
     case "tvp":
         tvp();
+        break;
+    case "yle":
+        yle();
         break;
     case "zdf":
         zdf();
