@@ -58,6 +58,10 @@ class Programmes {
         NProgress.start();
         let data = await
             Utils.getJson("https://start-api.npo.nl/page/franchise/" + id + "?page=10000");
+        if (data["code"] === "not_found") {
+            alert(await Utils.translate(localStorage.getItem("language") || "EN", data["message"]));
+            NProgress.done();
+        }
         let serie = data["components"][0]["series"];
         let image = "";
         if (serie.images != null && serie.images.header != null && serie.images.header.formats != null && serie.images.header.formats.web != null) {
@@ -70,8 +74,7 @@ class Programmes {
         $(".series-title").text(serie["title"]);
         $(".series-description").html(await
             Utils.translate(localStorage.getItem("language") || "EN", serie["description"])
-        )
-        ;
+        );
         $(".series-broadcasters").text(serie["broadcasters"].join(", "));
         $(".series-episodes-count").text(data["components"][2]["data"]["total"]);
         $(".series-channel").attr("src", "img/" + serie["channel"] + ".svg");

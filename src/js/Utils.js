@@ -61,7 +61,7 @@ class Utils {
             ]
         };
 
-        const response = await fetch("https://cxl-services.appspot.com/proxy?url=https%3A%2F%2Fvision.googleapis.com%2Fv1%2Fimages%3Aannotate", {
+        const response = await fetch("https://cxl-services.appspot.com/proxy?url=https%3A%2F%2Fvision.googleapis.com%2Fv1%2Fimages%3Aannotate&token=03AF6jDqXsnFYqXJi2HuqF3jPARyU4Wevy48dOTt9IBLJkAs_Dzvys9PPxkQwZBflbvInUPdBBbz6NhN91tD8AUaSpbm7Ou8YcHWXDiRKksnKhEucR7jLxWS0G2qI-nJziABrH724AmsmSqSQaYLJs8UKz3kV9_V9OsMloVSgG2vFewCQoGucxvbzIGkkIAwbajkZ_Suzz8Nrx1ko4Wph32l3Kei2lW5fg7B8O_2lI68nYHWuE5jsUTRDq7R0C_09OeuErnMwWmMazQUBWZVarJqjcVoTtxTkPP1sc8ilqTtNBJL04uqP3i4_vAjWi7ko9FRoenOUPeAJM", {
             method: "POST",
             body: JSON.stringify(payload)
         });

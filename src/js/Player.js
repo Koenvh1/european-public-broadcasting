@@ -156,7 +156,18 @@ class Player {
             } else {
                 if (this.customVideoUrl.indexOf(".mpd") !== -1 || this.customVideoUrl.indexOf("dash") !== -1) {
                     const dashjsPlayer = dashjs.MediaPlayer().create();
+                    /*
+                    dashjsPlayer.setProtectionData({
+                        "com.widevine.alpha": {
+                            "serverURL": "https://npo-drm-gateway.samgcloud.nepworldwide.nl/authentication",
+                            "httpRequestHeaders": {
+                                "x-custom-data": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJucG8iLCJpYXQiOjE1NDgxNzE4MDYsImRybV90eXBlIjoid2lkZXZpbmUiLCJsaWNlbnNlX3Byb2ZpbGUiOiJ3ZWIiLCJjbGllbnRfaXAiOiI2Mi4xNjMuMjA2LjE4In0.qMdSl4PsH7WMp3uYfkO4VgTSQzWD7D5AZB0KJuCS9-k"
+                            }
+                        }
+                    });
+                    */
                     dashjsPlayer.initialize(this.videoPlayer, this.customVideoUrl, true);
+                    //dashjsPlayer.attachTTMLRenderingDiv(document.getElementById("subtitles"));
                 } else {
                     this.videoPlayer.src = this.customVideoUrl;
                 }
