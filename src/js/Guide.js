@@ -37,7 +37,7 @@ class Guide {
                     `<div class="guide-item" style="left: ` + getPixelsStart + `px; width: ` + getPixelsLength + `px">
                 <span class="overflow">`;
                 if(schedule[i]["program"]["onDemand"]) {
-                    guideRowContent += `<a href="player.html?v=` + schedule[i]["program"]["id"] + `"><i class="fa fa-play-circle"></i></a> `;
+                    guideRowContent += `<a href="player-standalone.html?broadcaster=npo&videoUrl=` + schedule[i]["program"]["id"] + `"><i class="fa fa-play-circle"></i></a> `;
                 }
                 guideRowContent += `<strong>` + schedule[i]["program"]["title"] + `</strong></span><br>
                 <span class="text-muted overflow">` + this.padTimeLeft(start.getHours()) + `:` + this.padTimeLeft(start.getMinutes()) +

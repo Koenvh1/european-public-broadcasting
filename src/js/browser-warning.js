@@ -11,7 +11,7 @@
     })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
 
     // Internet Explorer 6-11
-    let isIE = /*@cc_on!@*/false || !!document.documentMode;
+    let isIE = !!document.documentMode;
 
     // Edge 20+
     let isEdge = !isIE && !!window.StyleMedia;

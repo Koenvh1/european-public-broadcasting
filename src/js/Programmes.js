@@ -57,7 +57,7 @@ class Programmes {
     async showSeriesModal(id) {
         NProgress.start();
         let data = await
-            Utils.getJson("https://start-api.npo.nl/page/franchise/" + id + "?page=10000");
+            Utils.getJson("https://start-api.npo.nl/page/franchise/" + id + "?from=0&size=1000");
         if (data["code"] === "not_found") {
             alert(await Utils.translate(localStorage.getItem("language") || "EN", data["message"]));
             NProgress.done();
@@ -104,7 +104,7 @@ class Programmes {
             } else if (episode.images != null && episode.images.original != null && episode.images.original.formats != null && episode.images.original.formats.web != null) {
                 image = episode.images.original.formats.web.source;
             }
-            episodeContent += `<a class="list-group-item d-flex justify-content-between align-items-center" href="player.html?v=` + episode["id"] + `">
+            episodeContent += `<a class="list-group-item d-flex justify-content-between align-items-center" href="player-standalone.html?broadcaster=npo&videoUrl=` + episode["id"] + `">
                                         <img src="` + image + `" alt="Still" class="modal-episode-image float-left ">
                                         <span class="w-75 ml-2">` + (episode["episodeTitle"] == null ? episode["title"] : episode["episodeTitle"]) + `<br>
                                             <small class="">Episode ` + episode["episodeNumber"] + ` - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString() + `</small>

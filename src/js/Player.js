@@ -16,27 +16,10 @@ class Player {
 
         this.customVideoUrl = null;
         this.customCaptionUrl = null;
+        this.protectionData = null;
     }
 
-    async getVideoUrl(videoId) {
-        let tokenResponse = await
-            fetch("https://ida.omroep.nl/app.php/auth");
-        let token = (await tokenResponse.json())["token"];
-
-        let linkResponse = await
-            fetch("https://ida.omroep.nl/app.php/" + videoId + "?adaptive=yes&token=" + token);
-        let items = (await linkResponse.json())["items"][0];
-        let url = items.find(item => item["label"] === "Hoog")["url"];
-        url = url.replace("callback=?", "callback=videoInfo");
-
-        let script = document.createElement("script");
-        script.src = url;
-        document.body.appendChild(script);
-
-        await this.loadSubtitles("https://rs.poms.omroep.nl/v1/api/subtitles/" + videoId + "/nl_NL/CAPTION.vtt");
-    }
-
-    async loadSubtitles(url) {
+   async loadSubtitles(url) {
         let subtitleResponse = await fetch(url);
         let blob = new Blob([(await subtitleResponse.text())], {type: "text/vtt"});
         let blobUrl = URL.createObjectURL(blob);
@@ -48,15 +31,6 @@ class Player {
         track.src = blobUrl;
 
         this.videoPlayer.appendChild(track);
-    }
-
-    async videoInfo(callback) {
-        if (callback.errorstring) {
-            alert(await
-                Utils.translate(localStorage.getItem("language") || "EN", callback.errorstring)
-            )
-        }
-        this.videoPlayer.src = callback.url;
     }
 
     async translateSubtitles(track, start) {
@@ -114,7 +88,6 @@ class Player {
             console.log(this.videoPlayer.error.message);
         });
         const searchParams = new URL(window.location).searchParams;
-        let videoId = searchParams.get("v");
         this.customVideoUrl = searchParams.get("videoUrl");
         this.customCaptionUrl = searchParams.get("captionUrl");
         let broadcaster = searchParams.get("broadcaster");
@@ -123,26 +96,29 @@ class Player {
                 let urls = await Broadcaster.parseUrl(broadcaster, this.customVideoUrl);
                 this.customVideoUrl = urls.video;
                 this.customCaptionUrl = urls.subtitles;
+                if (urls.protection) {
+                    this.protectionData = urls.protection;
+                }
             } catch (e) {
                 alert(e);
             }
         }
-        if (!this.customVideoUrl) {
-            await this.getVideoUrl(videoId);
-
-            let episode = await Utils.getJson("https://start-api.npo.nl/page/episode/" + videoId);
-
-            this.series = episode["components"][0]["series"]["id"];
-            //this.seasonId = episode["components"][0]["episode"]["seasons"][0]["id"];
-
-            episode = episode["components"][0]["episode"];
-            $(".series-title").text(episode["title"]);
-            $(".series-episode-title").text(episode["episodeTitle"]);
-            $(".series-broadcasters").text(episode["broadcasters"].join(", "));
-            $(".series-date").text(`season ${episode["seasonNumber"]} episode ${episode["episodeNumber"]} - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString());
-            $(".series-description").html(await Utils.translate(localStorage.getItem("language") || "EN", episode["description"]));
-            $(".series-channel").attr("src", "img/" + episode["channel"] + ".svg");
-        } else {
+        // if (!this.customVideoUrl) {
+        //     await this.getVideoUrl(videoId);
+        //
+        //     let episode = await Utils.getJson("https://start-api.npo.nl/page/episode/" + videoId);
+        //
+        //     this.series = episode["components"][0]["series"]["id"];
+        //     //this.seasonId = episode["components"][0]["episode"]["seasons"][0]["id"];
+        //
+        //     episode = episode["components"][0]["episode"];
+        //     $(".series-title").text(episode["title"]);
+        //     $(".series-episode-title").text(episode["episodeTitle"]);
+        //     $(".series-broadcasters").text(episode["broadcasters"].join(", "));
+        //     $(".series-date").text(`season ${episode["seasonNumber"]} episode ${episode["episodeNumber"]} - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString());
+        //     $(".series-description").html(await Utils.translate(localStorage.getItem("language") || "EN", episode["description"]));
+        //     $(".series-channel").attr("src", "img/" + episode["channel"] + ".svg");
+        // } else {
             if (this.customCaptionUrl) {
                 await this.loadSubtitles(this.customCaptionUrl);
             }
@@ -156,16 +132,9 @@ class Player {
             } else {
                 if (this.customVideoUrl.indexOf(".mpd") !== -1 || this.customVideoUrl.indexOf("dash") !== -1) {
                     const dashjsPlayer = dashjs.MediaPlayer().create();
-                    /*
-                    dashjsPlayer.setProtectionData({
-                        "com.widevine.alpha": {
-                            "serverURL": "https://npo-drm-gateway.samgcloud.nepworldwide.nl/authentication",
-                            "httpRequestHeaders": {
-                                "x-custom-data": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJucG8iLCJpYXQiOjE1NDgxNzE4MDYsImRybV90eXBlIjoid2lkZXZpbmUiLCJsaWNlbnNlX3Byb2ZpbGUiOiJ3ZWIiLCJjbGllbnRfaXAiOiI2Mi4xNjMuMjA2LjE4In0.qMdSl4PsH7WMp3uYfkO4VgTSQzWD7D5AZB0KJuCS9-k"
-                            }
-                        }
-                    });
-                    */
+                    if (this.protectionData) {
+                        dashjsPlayer.setProtectionData(this.protectionData);
+                    }
                     dashjsPlayer.initialize(this.videoPlayer, this.customVideoUrl, true);
                     //dashjsPlayer.attachTTMLRenderingDiv(document.getElementById("subtitles"));
                 } else {
@@ -179,7 +148,7 @@ class Player {
             $(".series-date").text("Unavailable");
             $(".series-description").text("Unavailable");
             $(".series-channel").text("Unavailable");
-        }
+        // }
 
         setInterval(async () => {
             let track = this.getCurrentTrack();

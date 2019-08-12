@@ -95,27 +95,88 @@ function err()
 {
     global $client, $url;
     $response = $client->request("GET", $url);
-    if (strpos($url, "etv2.") !== false) {
+    //if (strpos($url, "etv2.") !== false) {
         preg_match_all('/],(.+),"programName"/', $response->getBody()->getContents(), $output_array);
         $stream = "{" . $output_array[1][0] . "}";
         $data = json_decode($stream, true);
         $video = $data["media"]["src"]["file"];
         $subtitles = $data["media"]["subtitles"][0]["src"];
-    } else {
-        preg_match_all('/sources:\s"(.+)"/', $response->getBody()->getContents(), $output_array);
-        $stream = $output_array[1][0];
-        $response = $client->request("GET", "https://services.err.ee/api/media/mediaData?stream=" . urlencode($stream));
-        $data = json_decode($response->getBody(), true);
-        $video = $data["media"]["src"]["file"];
-        foreach ($subtitles = $data["subtitles"] as $key => $value) {
-            $subtitles = "https://services.err.ee/subtitles/file/" . $value["id"] . "/" . $value["id"] . "_$key.vtt";
-            break;
-        }
-    }
+//    } else {
+//        preg_match_all('/sources:\s"(.+)"/', $response->getBody()->getContents(), $output_array);
+//        $stream = $output_array[1][0];
+//        $response = $client->request("GET", "https://services.err.ee/api/media/mediaData?stream=" . urlencode($stream));
+//        $data = json_decode($response->getBody(), true);
+//        $video = $data["media"]["src"]["file"];
+//        foreach ($subtitles = $data["subtitles"] as $key => $value) {
+//            $subtitles = "https://services.err.ee/subtitles/file/" . $value["id"] . "/" . $value["id"] . "_$key.vtt";
+//            break;
+//        }
+//    }
 
     echo json_encode([
         "subtitles" => $subtitles,
         "video" => $video
+    ]);
+}
+
+function npo() {
+    global $client, $url;
+
+    $videoId = $url;
+
+    $response = $client->request("GET", "https://www.npostart.nl/api/token", [
+        "headers" => [
+            "X-Requested-With" => "XMLHttpRequest",
+            "X-Forwarded-For" => $_SERVER["REMOTE_ADDR"]
+        ]
+    ]);
+    $token = json_decode($response->getBody()->getContents(), true)["token"];
+    $xsrfToken = $response->getHeader("Set-Cookie");
+    foreach ($xsrfToken as $item) {
+        if (preg_match('/npo_session=([^;]*);/', $item, $output_array)) {
+            $xsrfToken = $output_array[1];
+            break;
+        }
+    }
+
+    $response = $client->request("POST", "https://www.npostart.nl/player/$videoId", [
+        "headers" => [
+            "X-Requested-With" => "XMLHttpRequest",
+            "X-XSRF-TOKEN" => urldecode($xsrfToken),
+            "Content-Type" => "application/x-www-form-urlencoded",
+            "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:69.0) Gecko/20100101 Firefox/69.0",
+            "Cookie" => "npo_session=$xsrfToken",
+            "X-Forwarded-For" => $_SERVER["REMOTE_ADDR"]
+        ],
+        "form_params" => [
+            "autoplay" => "0",
+            "progress" => "0",
+            "mediaId" => $videoId,
+            "trackProgress" => "1",
+            "share" => "1",
+            "pageUrl" => "http://www.npostart.nl/nederland-van-boven/21-11-2013/VPWON_1184655",
+            "hasAdConsent" => "0",
+            "_token" => $token,
+        ]
+    ]);
+    $token = json_decode($response->getBody()->getContents(), true)["token"];
+
+    $response = $client->request("GET", "https://start-player.npo.nl/video/$videoId/streams?profile=dash-widevine&quality=npo&tokenId=$token&streamType=broadcast&mobile=0&ios=0&isChromecast=0", [
+        "headers" => [
+            "X-Forwarded-For" => $_SERVER["REMOTE_ADDR"]
+        ]
+    ]);
+    $response = json_decode($response->getBody()->getContents(), true);
+
+    echo json_encode([
+        "subtitles" => "https://rs.poms.omroep.nl/v1/api/subtitles/" . $videoId . "/nl_NL/CAPTION.vtt",
+        "video" => $response["stream"]["src"],
+        "protection" => [
+            "com.widevine.alpha" => [
+                "serverURL" => $response["stream"]["keySystemOptions"][0]["options"]["licenseUrl"],
+                "httpRequestHeaders" => $response["stream"]["keySystemOptions"][0]["options"]["httpRequestHeaders"],
+            ]
+        ]
     ]);
 }
 
@@ -321,6 +382,9 @@ switch ($_GET["broadcaster"]) {
         break;
     case "err":
         err();
+        break;
+    case "npo":
+        npo();
         break;
     case "nrk":
         nrk();
