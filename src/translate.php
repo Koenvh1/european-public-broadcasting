@@ -14,10 +14,16 @@
 
 
 require_once ("vendor/autoload.php");
-$tr = new \Stichoza\GoogleTranslate\TranslateClient();
+$tr = new \Stichoza\GoogleTranslate\GoogleTranslate();
 
 $params = json_decode(file_get_contents("php://input"), true);
 
+try {
+    $translated = $tr->setTarget($params["target"])->translate($params["text"]);
+} catch (ErrorException $e) {
+    $translated = $params["text"];
+}
+
 echo json_encode([
-    "result" => $tr->setTarget($params["target"])->translate($params["text"])
+    "result" => $translated
 ]);

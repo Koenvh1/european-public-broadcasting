@@ -162,11 +162,11 @@ class Player {
             }
         }, 500);
 
-        setInterval(async () => {
-            if (!this.videoPlayer.paused && $("#enableOcr").is(":checked")) {
-                await this.ocr();
-            }
-        }, 2000);
+        // setInterval(async () => {
+        //     if (!this.videoPlayer.paused && $("#enableOcr").is(":checked")) {
+        //         await this.ocr();
+        //     }
+        // }, 2000);
 
         NProgress.done();
     }
