@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include "components/header.twig" %}
+<body class="bg-light">
+{% include "components/menu.twig" %}
+
+<main role="main">
+    <div class="album py-2">
+        <div class="container py-5">
+            <div class="col-lg-8 col-md-12 col-sm-12 offset-lg-2">
+                <h1 class="display-4 text-center pb-1">Dutch Public Broadcasting</h1>
+                <p class="lead text-center">
+                    An interface to the best the NPO has to offer &mdash; in English<br>
+                    <a href="programmes.html" class="btn btn-primary mt-2">Show the programmes</a>
+                </p>
+                <img class="pt-4 w-100" src="img/npo-header.png">
+                <p class="pt-5">
+                    The NPO offers a lot of high quality content, of which very little is available in English.
+                    Dutch Public Broadcasting aims to change that, by providing an English website and English subtitles to the content of the NPO.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+{% include "components/footer.twig" %}
+
+{% include "components/series-modal.twig" %}
+
+<script src="js/vendor.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+    let p = new Programmes();
+    p.load();
+</script>
+</body>
+</html>

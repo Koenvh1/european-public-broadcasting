@@ -122,7 +122,8 @@ function err()
 function npo() {
     global $client, $url;
 
-    $videoId = $url;
+    $videoId = explode("/", $url);
+    $videoId = end($videoId);
 
     $response = $client->request("GET", "https://www.npostart.nl/api/token", [
         "headers" => [

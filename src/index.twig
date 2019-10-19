@@ -2,38 +2,62 @@
 <html lang="en">
 {% include "components/header.twig" %}
 <body class="bg-light">
-{% include "components/menu.twig" %}
+{#{% include "components/menu.twig" %}#}
 
-<main role="main">
-    <div class="album py-2">
-        <div class="container py-5">
-            <div class="col-lg-8 col-md-12 col-sm-12 offset-lg-2">
-                <h1 class="display-4 text-center pb-1">Dutch Public Broadcasting</h1>
-                <p class="lead text-center">
-                    An interface to the best the NPO has to offer &mdash; in English<br>
-                    <a href="programmes.html" class="btn btn-primary mt-2">Show the programmes</a>
-                </p>
-                <img class="pt-4 w-100" src="img/npo-header.png">
-                <p class="pt-5">
-                    The NPO offers a lot of high quality content, of which very little is available in English.
-                    Dutch Public Broadcasting aims to change that, by providing an English website and English subtitles to the content of the NPO.
-                </p>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 mt-5">
+            <h1>Open a broadcaster <small><span class="badge badge-primary">Beta</span></small></h1>
+            <p class="lead">
+                European Broadcasting has support for videos from public broadcasters around Europe.
+                This means that you can have subtitles translated for for example Danish or Norwegian television.
+                Please check beforehand that the video actually has subtitles in the native language.
+            </p>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <h3>Automatic parsing</h3>
+            <form method="get" action="player-standalone.html">
+                <div class="form-group mb-2">
+                    <select class="form-control" name="broadcaster" required>
+                        <option value="">-- Select a broadcaster --</option>
+                        <option value="ard">ARD</option>
+                        <option value="ceskatelevize">Česká televize</option>
+                        <option value="dr">Danmarks Radio (DR)</option>
+                        <option value="err">Eesti Rahvusringhääling (ERR)</option>
+                        <option value="npo">Nederlandse Publieke Omroep (NPO)</option>
+                        <option value="nrk">Norsk Rikskringkasting (NRK)</option>
+                        <option value="rtbf">RTBF</option>
+                        <option value="rts">Télévision Suisse Romande (RTS)</option>
+                        <option value="svt">Sveriges Television (SVT)</option>
+                        <option value="tvp">Telewizja Polska (TVP)</option>
+                        <option value="yle">YLE</option>
+                        <option value="zdf">Zweites Deutsches Fernsehen (ZDF)</option>
+                    </select>
+                </div>
+                <div class="form-group mb-2">
+                    <input type="url" class="form-control" id="videoUrl" name="videoUrl" placeholder="Video URL" required>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2 btn-block">Submit</button>
+            </form>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <h3>Manual URL entry</h3>
+            <form method="get" action="player-standalone.html">
+                <div class="form-group mb-2">
+                    <input type="url" class="form-control" id="videoUrl" name="videoUrl" placeholder="Video URL">
+                </div>
+                <div class="form-group mb-2">
+                    <input type="url" class="form-control" id="captionUrl" name="captionUrl" placeholder="Caption URL">
+                </div>
+                <button type="submit" class="btn btn-primary mb-2 btn-block">Submit</button>
+            </form>
         </div>
     </div>
+</div>
 
-</main>
-
-{% include "components/footer.twig" %}
-
-{% include "components/series-modal.twig" %}
-
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 <script src="js/vendor.js"></script>
 <script src="js/app.js"></script>
-
-<script>
-    let p = new Programmes();
-    p.load();
-</script>
 </body>
 </html>
