@@ -85,6 +85,24 @@ function dr()
     $video = $data["PrimaryAsset"]["Links"][1]["Uri"];
     $subtitles = $data["PrimaryAsset"]["Subtitleslist"][0]["Uri"];
 
+    // 0100000140e8314033524c5875ff2266b4eb08f694cd6f52ec1e13a17f1daa9f3b9da608e56528a1a4b0158c9359fd609132b8e6019ab9544e633d0de220ed678b8c256f4e414b2d1ce1b2491bbf06d6f0a4a747f70326d06153d3dda3a67c7bc9261a921d0ebf601f978864204999797a04e55f05db092a09e5de603bf3db04bef315ea078385e8911ad9aa812a32820ff8ca4375a5f62b714c6fb0f36af027a1ed6684bea46722f26f09002f04d57eb860987e97
+    if ($video == null) {
+        $encrypted = $data["PrimaryAsset"]["Links"][1]["EncryptedUri"];
+        $n = hexdec(substr($encrypted, 2, 8));
+        $a = substr($encrypted, 10 + $n);
+        $data = hex2bin(substr($encrypted, 10, $n));
+        $key = hex2bin(hash("sha256",  $a . ":sRBzYNXBzkKgnjj8pGtkACch"));
+        $iv = hex2bin($a);
+
+//        error_reporting(E_ALL);
+//        ini_set("display_errors", 1);
+//        var_dump($data);
+//        var_dump($key);
+//        var_dump($iv);
+
+        $video = openssl_decrypt($data, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
+    }
+
     echo json_encode([
         "subtitles" => $subtitles,
         "video" => $video
