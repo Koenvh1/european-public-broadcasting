@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web:300,400,600,700&display=swap&subset=latin-ext');
+
+body {
+    font-family: Tahoma, Arial, Helvetica, sans-serif;
+    color: #646567;
+    margin: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 5px;
+}
+
+@media only screen and (min-width: 768px) {
+    .container {
+        margin-top: 50px;
+    }
+}
+
+.logo-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo {
+    height: 75px;
+}
+
+.logo-text {
+    margin: 15px;
+    font-size: 2rem;
+    line-height: 2rem;
+    font-weight: bold;
+}
+
+.broadcasters {
+    display: grid;
+    grid-gap: 5px;
+    grid-template-columns: repeat(auto-fill, 145px);
+}
+
+.broadcaster-box {
+    display: inline-block;
+}
+
+.broadcaster {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    user-select: none;
+    width: 50vw;
+    max-width: 100px;
+    height: 50px;
+    padding: 17px;
+    border: solid 3px #004494;
+}
+
+.broadcaster-input:checked ~ .broadcaster {
+    padding: 15px;
+    border: solid 5px #004494;
+}
+
+.broadcaster:hover {
+    background: #dedfe1;
+}
+
+.broadcaster img {
+    max-height: 50px;
+    width: auto;
+    max-width: 80%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.broadcaster-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #004494;
+    font-family: "Titillium Web", Tahoma, Arial, Helvetica, sans-serif;
+}
+
+input {
+    font-size: 1.1rem;
+    line-height: 1.1rem;
+    padding: 17px;
+    border: solid 3px #004494;
+    color: #004494;
+    flex-grow: 1;
+}
+
+input:focus {
+    padding: 15px;
+    border: solid 5px #004494;
+}
+
+select {
+    font-size: 1rem;
+    line-height: 1rem;
+    padding: 5px;
+    border: solid 2px #004494;
+    color: #004494;
+}
+
+select:focus {
+    padding: 4px;
+    border: solid 3px #004494;
+}
+
+.btn {
+    background: white;
+    color: #004494;
+    font-size: 1.1rem;
+    line-height: 1.1rem;
+    padding: 17px;
+    border: solid 3px #004494;
+    border-left: none;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #004494;
+    color: white;
+}
+
+.flex {
+    display: flex;
+    width: 100%;
+}

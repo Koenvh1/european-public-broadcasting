@@ -26,7 +26,7 @@ class Player {
 
         let track = document.createElement("track");
         track.kind = "subtitles";
-        track.label = this.languages.find(l => l.code === this.language).name;
+        track.label = "Captions"; //this.languages.find(l => l.code === this.language).name;
         track.srclang = this.language;
         track.src = blobUrl;
 
@@ -69,7 +69,11 @@ class Player {
         return this.videoPlayer.textTracks[0];
     }
 
-    async load() {
+    setLanguage(language) {
+        this.language = language;
+    }
+
+    async load(video, caption, protection) {
         NProgress.start();
 
         this.videoPlayer.addEventListener("loadedmetadata", () => {
@@ -87,68 +91,32 @@ class Player {
         this.videoPlayer.addEventListener("error", (e) => {
             console.log(this.videoPlayer.error.message);
         });
-        const searchParams = new URL(window.location).searchParams;
-        this.customVideoUrl = searchParams.get("videoUrl");
-        this.customCaptionUrl = searchParams.get("captionUrl");
-        let broadcaster = searchParams.get("broadcaster");
-        if (broadcaster) {
-            try {
-                let urls = await Broadcaster.parseUrl(broadcaster, this.customVideoUrl);
-                this.customVideoUrl = urls.video;
-                this.customCaptionUrl = urls.subtitles;
-                if (urls.protection) {
-                    this.protectionData = urls.protection;
+        this.customVideoUrl = video;
+        this.customCaptionUrl = caption;
+        this.protectionData = protection;
+
+        if (this.customCaptionUrl) {
+            await this.loadSubtitles(this.customCaptionUrl);
+        }
+        if (this.customVideoUrl.indexOf(".m3u8") !== -1) {
+            if(Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(this.customVideoUrl);
+                hls.attachMedia(this.videoPlayer);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => this.videoPlayer.play());
+            }
+        } else {
+            if (this.customVideoUrl.indexOf(".mpd") !== -1 || this.customVideoUrl.indexOf("dash") !== -1) {
+                const dashjsPlayer = dashjs.MediaPlayer().create();
+                if (this.protectionData) {
+                    dashjsPlayer.setProtectionData(this.protectionData);
                 }
-            } catch (e) {
-                alert(e);
+                dashjsPlayer.initialize(this.videoPlayer, this.customVideoUrl, true);
+                //dashjsPlayer.attachTTMLRenderingDiv(document.getElementById("subtitles"));
+            } else {
+                this.videoPlayer.src = this.customVideoUrl;
             }
         }
-        // if (!this.customVideoUrl) {
-        //     await this.getVideoUrl(videoId);
-        //
-        //     let episode = await Utils.getJson("https://start-api.npo.nl/page/episode/" + videoId);
-        //
-        //     this.series = episode["components"][0]["series"]["id"];
-        //     //this.seasonId = episode["components"][0]["episode"]["seasons"][0]["id"];
-        //
-        //     episode = episode["components"][0]["episode"];
-        //     $(".series-title").text(episode["title"]);
-        //     $(".series-episode-title").text(episode["episodeTitle"]);
-        //     $(".series-broadcasters").text(episode["broadcasters"].join(", "));
-        //     $(".series-date").text(`season ${episode["seasonNumber"]} episode ${episode["episodeNumber"]} - ` + new Date(Date.parse(episode["broadcastDate"])).toLocaleDateString());
-        //     $(".series-description").html(await Utils.translate(localStorage.getItem("language") || "EN", episode["description"]));
-        //     $(".series-channel").attr("src", "img/" + episode["channel"] + ".svg");
-        // } else {
-            if (this.customCaptionUrl) {
-                await this.loadSubtitles(this.customCaptionUrl);
-            }
-            if (this.customVideoUrl.indexOf(".m3u8") !== -1) {
-                if(Hls.isSupported()) {
-                    const hls = new Hls();
-                    hls.loadSource(this.customVideoUrl);
-                    hls.attachMedia(this.videoPlayer);
-                    hls.on(Hls.Events.MANIFEST_PARSED, () => this.videoPlayer.play());
-                }
-            } else {
-                if (this.customVideoUrl.indexOf(".mpd") !== -1 || this.customVideoUrl.indexOf("dash") !== -1) {
-                    const dashjsPlayer = dashjs.MediaPlayer().create();
-                    if (this.protectionData) {
-                        dashjsPlayer.setProtectionData(this.protectionData);
-                    }
-                    dashjsPlayer.initialize(this.videoPlayer, this.customVideoUrl, true);
-                    //dashjsPlayer.attachTTMLRenderingDiv(document.getElementById("subtitles"));
-                } else {
-                    this.videoPlayer.src = this.customVideoUrl;
-                }
-            }
-
-            $(".series-title").text("Unavailable");
-            $(".series-episode-title").text("Unavailable");
-            $(".series-broadcasters").text("Unavailable");
-            $(".series-date").text("Unavailable");
-            $(".series-description").text("Unavailable");
-            $(".series-channel").text("Unavailable");
-        // }
 
         setInterval(async () => {
             let track = this.getCurrentTrack();
