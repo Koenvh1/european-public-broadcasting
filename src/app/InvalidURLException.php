@@ -1,7 +1,7 @@
 <?php
 
 
-namespace app;
+namespace Koenvh\PublicBroadcasting;
 
 
 use Throwable;

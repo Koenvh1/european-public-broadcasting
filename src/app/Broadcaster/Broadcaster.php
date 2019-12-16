@@ -4,7 +4,7 @@
 namespace Koenvh\PublicBroadcasting\Broadcaster;
 
 
-use app\InvalidURLException;
+use Koenvh\PublicBroadcasting\InvalidURLException;
 use Koenvh\PublicBroadcasting\StreamInformation;
 
 abstract class Broadcaster
