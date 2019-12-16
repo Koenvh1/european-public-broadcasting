@@ -66,6 +66,12 @@ class Player {
     }
 
     getCurrentTrack() {
+        for (let i = 0; i < this.videoPlayer.textTracks.length; i++) {
+            let t = this.videoPlayer.textTracks[i];
+            if (t.label === "Captions") {
+                return t;
+            }
+        }
         return this.videoPlayer.textTracks[0];
     }
 
@@ -77,7 +83,10 @@ class Player {
         NProgress.start();
 
         this.videoPlayer.addEventListener("loadedmetadata", () => {
-            this.videoPlayer.textTracks[0].mode = "showing";
+            for (let i = 0; i < this.videoPlayer.textTracks.length; i++) {
+                this.videoPlayer.textTracks[i].mode = "hidden";
+            }
+            this.getCurrentTrack().mode = "showing";
         });
 
         this.videoPlayer.addEventListener("canplay", () => {
