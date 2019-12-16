@@ -30,8 +30,6 @@
         `<option value="${lang[0]}" ${language === lang[0] ? "selected" : ""}>${lang[1]}</option>`
     ).join("\n");
 
-    console.log(languagesContent);
-
     const $languages = document.querySelector(".languages");
     $languages.innerHTML = languagesContent;
 

@@ -13,7 +13,14 @@ class DR extends Broadcaster
     {
         preg_match_all('/\/([^\/]+?)($|#)/', $url, $output_array);
         $id = $output_array[1][0];
-        $response = $this->client->request("GET", "https://www.dr.dk/mu-online/api/1.4/programcard/$id?expanded=true");
+        $id = explode("_", $id);
+        $id = end($id);
+        $response = $this->client->request("GET", $url);
+        preg_match_all('/"customId":"([^"]+)"/', $response->getBody(), $output_array);
+        $id = $output_array[1][0];
+        $id = explode(":", $id);
+        $id = end($id);
+        $response = $this->client->request("GET", "https://www.dr.dk/mu-online/api/1.4/programcard/?expanded=true&productionnumber=$id");
         $data = json_decode($response->getBody(), true);
         $video = $data["PrimaryAsset"]["Links"][1]["Uri"];
         $subtitles = $data["PrimaryAsset"]["Subtitleslist"][0]["Uri"];
