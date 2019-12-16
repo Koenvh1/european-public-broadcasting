@@ -1,0 +1,26 @@
+{
+    "name": "koenvh1/publicbroadcasting",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Koen",
+            "email": "koen@koenvh.nl"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.3",
+        "stichoza/google-translate-php": "^4.0",
+        "ext-json": "*",
+        "ext-simplexml": "*",
+        "phpseclib/mcrypt_compat": "^1.0",
+        "ext-openssl": "*",
+        "slim/slim": "^3.0",
+        "slim/twig-view": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Koenvh\\PublicBroadcasting\\": "app/"
+        }
+    }
+}

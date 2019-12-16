@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+{% include "header.twig" %}
+<body>
+{#{% include "components/menu.twig" %}#}
+
+<div class="container">
+    <div class="logo-box">
+        <img class="logo" src="img/flag.svg" alt="Flag of the European Union">
+        <h1 class="logo-text">European Public Broadcasting</h1>
+    </div>
+    <p class="lead">
+        European Public Broadcasting is an attempt to make European content available throughout Europe, by providing automatically translated subtitles for broadcasters around Europe.
+        This means that you can have subtitles translated for for example Danish or Norwegian television, and watch Danish programmes with English, Dutch or Swahili subtitles.
+    </p>
+    <form method="get" action="video" class="flex">
+        <input type="url" class="form-control" id="videoUrl" name="v" placeholder="Video URL" required><button type="submit" class="btn">Let's go</button>
+    </form>
+
+    <h2>Supported broadcasters:</h2>
+    <div class="broadcasters">
+        <a href="https://www.ardmediathek.de" target="_blank" class="broadcaster-box">
+            {#        <input type="radio" name="broadcaster" class="broadcaster-input" value="ARD" id="ARD">#}
+            <label class="broadcaster" for="ARD">
+                <img src="img/ARD.svg" alt="ARD" title="ARD">
+            </label>
+        </a>
+        <a href="https://www.ceskatelevize.cz/porady/" target="_blank" class="broadcaster-box">
+            <label class="broadcaster" for="CeskaTelevize">
+                <img src="img/CeskaTelevize.svg" alt="Ceska Televize" title="Ceska Televize">
+            </label>
+        </a>
+        <a href="https://www.dr.dk/drtv" target="_blank" class="broadcaster-box">
+            <label class="broadcaster" for="DR">
+                <img src="img/DR.svg" alt="DR" title="DR">
+            </label>
+        </a>
+        <a href="https://etv.err.ee/" target="_blank" class="broadcaster-box">
+            <label class="broadcaster" for="ERR">
+                <img src="img/ERR.svg" alt="ERR" title="ERR">
+            </label>
+        </a>
+        <a href="https://npostart.nl" target="_blank" class="broadcaster-box">
+            <label class="broadcaster" for="NPO">
+                <img src="img/NPO.svg" alt="NPO" title="NPO">
+            </label>
+        </a>
+        <a href="https://tv.nrk.no/" target="_blank" class="broadcaster-box">
+            <label class="broadcaster" for="NRK">
+                <img src="img/NRK.svg" alt="NRK" title="NRK">
+            </label>
+        </a>
+        <a href="https://www.rtbf.be/auvio/" target="_blank" class="broadcaster-box">
+            <label class="broadcaster" for="RTBF">
+                <img src="img/RTBF.svg" alt="RTBF" title="RTBF">
+            </label>
+        </a>
+        <a href="https://www.rts.ch/play/tv" target="_blank" class="broadcaster-box">
+            <label class="broadcaster" for="RTS">
+                <img src="img/RTS.svg" alt="RTS" title="RTS">
+            </label>
+        </a>
+        <a href="https://www.svtplay.se/" target="_blank" class="broadcaster-box">
+            <label class="broadcaster" for="SVT">
+                <img src="img/SVT.svg" alt="SVT" title="SVT">
+            </label>
+        </a>
+        <a href="https://vod.tvp.pl/" target="_blank" class="broadcaster-box">
+            <label class="broadcaster" for="TVP">
+                <img src="img/TVP.svg" alt="TVP" title="TVP">
+            </label>
+        </a>
+        <a href="https://areena.yle.fi/tv" target="_blank" class="broadcaster-box">
+            <label class="broadcaster" for="YLE">
+                <img src="img/YLE.svg" alt="YLE" title="YLE">
+            </label>
+        </a>
+        <a href="https://zdf.de" target="_blank" class="broadcaster-box">
+            <label class="broadcaster" for="ZDF">
+                <img src="img/ZDF.svg" alt="ZDF" title="ZDF">
+            </label>
+        </a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
+</body>
+</html>

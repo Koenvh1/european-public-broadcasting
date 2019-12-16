@@ -1,35 +1,6 @@
 class Utils {
     static async translate(language, text) {
-        // const payload = {
-        //     "id": 91510002,
-        //     "jsonrpc": "2.0",
-        //     "method": "LMT_handle_jobs",
-        //     "params": {
-        //         "jobs": [
-        //             {
-        //                 "kind": "default",
-        //                 "raw_en_sentence": text
-        //             }
-        //         ],
-        //         "lang": {
-        //             "source_lang_computed": "NL",
-        //             "target_lang": language,
-        //             "user_preferred_langs": [
-        //                 "FR", "ES", "DE", "EN", "NL"
-        //             ],
-        //         },
-        //         "priority": -1,
-        //         "timestamp": Date.now()
-        //     }
-        // };
-        //
-        // const translationResponse = await fetch("translate.php", {
-        //     method: "POST",
-        //     body: JSON.stringify(payload)
-        // });
-        //
-        // let translation = (await translationResponse.json())["result"]["translations"][0]["beams"][0]["postprocessed_sentence"];
-        let translation = await (await fetch("translate.php", {
+        let translation = await (await fetch("translate", {
             method: "POST",
             body: JSON.stringify({"target": language, "text": text})
         })).json();
@@ -37,51 +8,6 @@ class Utils {
 
         translation = translation.replace(/\.{3,}/, "...");
         return translation;
-    }
-
-    static async ocr(image) {
-        const payload = {
-            "requests": [
-                {
-                    "features": [
-                        {
-                            "maxResults": 1,
-                            "type": "DOCUMENT_TEXT_DETECTION"
-                        }
-                    ],
-                    "image": {
-                        "content": image
-                    },
-                    "imageContext": {
-                        "languageHints": [
-                            "nl", "en"
-                        ]
-                    }
-                }
-            ]
-        };
-
-        const response = await fetch("https://cxl-services.appspot.com/proxy?url=https%3A%2F%2Fvision.googleapis.com%2Fv1%2Fimages%3Aannotate&token=03AF6jDqXsnFYqXJi2HuqF3jPARyU4Wevy48dOTt9IBLJkAs_Dzvys9PPxkQwZBflbvInUPdBBbz6NhN91tD8AUaSpbm7Ou8YcHWXDiRKksnKhEucR7jLxWS0G2qI-nJziABrH724AmsmSqSQaYLJs8UKz3kV9_V9OsMloVSgG2vFewCQoGucxvbzIGkkIAwbajkZ_Suzz8Nrx1ko4Wph32l3Kei2lW5fg7B8O_2lI68nYHWuE5jsUTRDq7R0C_09OeuErnMwWmMazQUBWZVarJqjcVoTtxTkPP1sc8ilqTtNBJL04uqP3i4_vAjWi7ko9FRoenOUPeAJM", {
-            method: "POST",
-            body: JSON.stringify(payload)
-        });
-
-        let intermediate = (await response.json())["responses"][0];
-        if (intermediate.hasOwnProperty("textAnnotations")) {
-            let annotation = intermediate["textAnnotations"][0];
-            if ((annotation["boundingPoly"]["vertices"][2]["y"] - annotation["boundingPoly"]["vertices"][0]["y"]) > 25) {
-                return annotation["description"];
-            }
-        }
-        return null;
-    }
-
-    static async getJson(url) {
-        return (await fetch(url, {
-            headers: {
-                "ApiKey": "e45fe473feaf42ad9a215007c6aa5e7e"
-            }
-        })).json();
     }
 
     static getLanguages() {
