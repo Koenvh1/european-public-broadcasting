@@ -20,7 +20,18 @@ abstract class Broadcaster
         ]);
     }
 
+    /**
+     * Get a regex that identifies URLs that belong to this broadcaster,
+     * e.g. "/npostart\\.nl/i" identifies all content from the NPO.
+     * @return string The regex string
+     */
     abstract static function getRegex() : string;
+
+    /**
+     * Parse the URL given for this broadcaster, and turn it into a streamable video and captions file.
+     * @param string $url A URL for this broadcaster, e.g. https://www.npostart.nl/heel-holland-bakt/15-12-2019/POW_04451443
+     * @return StreamInformation The stream information about this broadcaster, with video, captions and potentially DRM information.
+     */
     abstract function retrieve(string $url) : StreamInformation;
 
     static function getStreamInformation(string $url) : StreamInformation

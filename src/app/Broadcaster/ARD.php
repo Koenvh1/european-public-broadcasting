@@ -16,8 +16,9 @@ class ARD extends Broadcaster
         preg_match_all('/\"([^"]+\.m3u8)"/', $body, $output_array);
         $video = $output_array[1][0];
 
-        preg_match_all('/subtitleUrl":"([^"]+)"/', $body, $output_array);
+        preg_match_all('/subtitleUrl":("[^"]+")/', $body, $output_array);
         $subtitles = $output_array[1][0];
+        $subtitles = json_decode($subtitles);
         $subtitles = file_get_contents($subtitles);
         $subtitles = str_replace("tt:", "", $subtitles);
         $xml = simplexml_load_string($subtitles);

@@ -2,13 +2,15 @@ class Player {
     constructor() {
         this.videoPlayer = document.querySelector("#videoPlayer");
         this.language = localStorage.getItem("language") || "en";
+        this.translated = {};
         this.languages = Object.entries(Utils.getLanguages()).map(lang => {
+            this.translated[lang[0]] = [];
             return {
                 code: lang[0],
                 name: lang[1],
             }
         });
-        this.translated = Object.entries(Utils.getLanguages()).reduce((map, lang) => (map[lang[0]] = [], map), {});
+        //this.translated = Object.entries(Utils.getLanguages()).reduce((map, lang) => (map[lang[0]] = [], map), {});
 
         this.series = null;
         this.seasonId = null;
@@ -24,13 +26,15 @@ class Player {
         let blob = new Blob([(await subtitleResponse.text())], {type: "text/vtt"});
         let blobUrl = URL.createObjectURL(blob);
 
-        let track = document.createElement("track");
-        track.kind = "subtitles";
-        track.label = "Captions"; //this.languages.find(l => l.code === this.language).name;
-        track.srclang = this.language;
-        track.src = blobUrl;
+        this.languages.forEach(language => {
+            let track = document.createElement("track");
+            track.kind = "subtitles";
+            track.label = language.name; //"Captions"; //this.languages.find(l => l.code === this.language).name;
+            track.srclang = language.code;//this.language;
+            track.src = blobUrl;
 
-        this.videoPlayer.appendChild(track);
+            this.videoPlayer.appendChild(track);
+        });
     }
 
     async translateSubtitles(track, start) {
@@ -68,7 +72,7 @@ class Player {
     getCurrentTrack() {
         for (let i = 0; i < this.videoPlayer.textTracks.length; i++) {
             let t = this.videoPlayer.textTracks[i];
-            if (t.label === "Captions") {
+            if (t.language === this.language) {
                 return t;
             }
         }
@@ -79,14 +83,18 @@ class Player {
         this.language = language;
     }
 
-    async load(video, caption, protection) {
-        NProgress.start();
-
-        this.videoPlayer.addEventListener("loadedmetadata", () => {
-            for (let i = 0; i < this.videoPlayer.textTracks.length; i++) {
+    hideCaptions() {
+        for (let i = 0; i < this.videoPlayer.textTracks.length; i++) {
+            if (this.videoPlayer.textTracks[i].mode !== "hidden") {
                 this.videoPlayer.textTracks[i].mode = "hidden";
             }
-            this.getCurrentTrack().mode = "showing";
+        }
+        // this.videoPlayer.textTracks[this.videoPlayer.textTracks.length - 1].mode = "hidden";
+    }
+
+    async load(video, caption, protection) {
+        this.videoPlayer.addEventListener("loadedmetadata", () => {
+            this.hideCaptions();
         });
 
         this.videoPlayer.addEventListener("canplay", () => {
@@ -138,48 +146,5 @@ class Player {
                 }
             }
         }, 500);
-
-        // setInterval(async () => {
-        //     if (!this.videoPlayer.paused && $("#enableOcr").is(":checked")) {
-        //         await this.ocr();
-        //     }
-        // }, 2000);
-
-        NProgress.done();
-    }
-
-    async ocr() {
-        let canvas = document.createElement("canvas");
-        let w = this.videoPlayer.videoWidth;
-        let h = Math.round(this.videoPlayer.videoHeight / 4);
-        canvas.width = w;
-        canvas.height = h;
-
-        let context = canvas.getContext("2d");
-        context.drawImage(this.videoPlayer, 0, h * 3, w, h, 0, 0, w, h);
-        let image = canvas.toDataURL("image/png");
-
-        $("#ocr").attr("src", image);
-
-        image = image.split(",")[1];
-        let response = await Utils.ocr(image);
-        if (response != null && this.lastOcr !== response) {
-            this.lastOcr = response;
-            const track = this.getCurrentTrack();
-            let translation = await Utils.translate(this.language, response);
-            //console.log(translation);
-
-            /*
-            for(let i = 0; i < this.videoPlayer.textTracks[1].activeCues.length; i++) {
-                let cue = this.videoPlayer.textTracks[1].activeCues[i];
-                if(cue.text === translation) {
-                    cue.endTime += 2;
-                    return;
-                }
-            }
-            */
-            track.addCue(new VTTCue(this.videoPlayer.currentTime, this.videoPlayer.currentTime + 2.2, translation));
-
-        }
     }
 }
