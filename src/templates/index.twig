@@ -9,9 +9,9 @@
         <img class="logo" src="img/flag.svg" alt="Flag of the European Union">
         <h1 class="logo-text">European Public Broadcasting</h1>
     </div>
-    <p class="lead">
-        European Public Broadcasting is an attempt to make European content available throughout Europe, by providing automatically translated subtitles for broadcasters around Europe.
-        This means that you can have subtitles translated for for example Danish or Norwegian television, and watch Danish programmes with English, Dutch or Swahili subtitles.
+    <p>
+        Remove the language barrier to European content. European Public Broadcasting provides automatically translated subtitles for broadcasters around Europe,
+        this means that you can have subtitles translated Danish or Norwegian television, and watch them with English or Swahili subtitles.
     </p>
     <form method="get" action="video" class="flex">
         <input type="url" class="form-control" id="videoUrl" name="v" placeholder="Video URL" required><button type="submit" class="btn">Let's go</button>
@@ -20,7 +20,6 @@
     <h2>Supported broadcasters:</h2>
     <div class="broadcasters">
         <a href="https://www.ardmediathek.de" target="_blank" class="broadcaster-box">
-            {#        <input type="radio" name="broadcaster" class="broadcaster-input" value="ARD" id="ARD">#}
             <label class="broadcaster" for="ARD">
                 <img src="img/ARD.svg" alt="ARD" title="ARD">
             </label>
@@ -81,6 +80,19 @@
             </label>
         </a>
     </div>
+
+    <h2>How it works:</h2>
+    <ol>
+        <li>Go to the website of a supported broadcaster</li>
+        <li>Find a video you would like to play</li>
+        <li>Copy the URL of the video page</li>
+        <li>Paste it in the URL bar above and click "Let's go"</li>
+    </ol>
+
+    <footer>
+        <br>
+        Created by <a href="https://koenvh.nl" target="_blank">Koenvh</a>. Contribute on <a href="https://github.com/Koenvh1/european-public-broadcasting" target="_blank">GitHub</a>.
+    </footer>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
