@@ -2,12 +2,13 @@
 
 :root {
     --plyr-color-main: #004494;
+    --plyr-menu-color: #000000;
     --plyr-menu-background: #ffffff;
 }
 
 body {
     font-family: 'Inter', Tahoma, Arial, Helvetica, sans-serif;
-    color: #646567;
+    color: #000000;
     margin: 0;
 }
 
