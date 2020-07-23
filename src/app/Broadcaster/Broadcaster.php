@@ -4,6 +4,7 @@
 namespace Koenvh\PublicBroadcasting\Broadcaster;
 
 
+use GuzzleHttp\Exception\ClientException;
 use Koenvh\PublicBroadcasting\InvalidURLException;
 use Koenvh\PublicBroadcasting\StreamInformation;
 
@@ -68,6 +69,10 @@ abstract class Broadcaster
             throw new InvalidURLException();
         }
 
-        return $broadcaster->retrieve($url);
+        try {
+            return $broadcaster->retrieve($url);
+        } catch (ClientException $e) {
+            throw new InvalidURLException();
+        }
     }
 }
