@@ -47,13 +47,14 @@ body {
 
 .broadcasters {
     display: grid;
-    grid-gap: 5px;
-    grid-template-columns: repeat(auto-fill, 145px);
+    grid-gap: 0px;
+    grid-template-columns: repeat(auto-fill, 160px);
     justify-content: center;
 }
 
 .broadcaster-box {
     display: inline-block;
+    height: 90px;
 }
 
 .broadcaster {
@@ -62,10 +63,10 @@ body {
     cursor: pointer;
     user-select: none;
     width: 50vw;
-    max-width: 100px;
+    max-width: 120px;
     height: 50px;
-    padding: 17px;
-    border: solid 3px #004494;
+    padding: 20px;
+    /*border: solid 3px #004494;*/
 }
 
 .broadcaster-input:checked ~ .broadcaster {
