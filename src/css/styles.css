@@ -1,7 +1,12 @@
-@import url('https://fonts.googleapis.com/css?family=Titillium+Web:300,400,600,700&display=swap&subset=latin-ext');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+:root {
+    --plyr-color-main: #004494;
+    --plyr-menu-background: #ffffff;
+}
 
 body {
-    font-family: Tahoma, Arial, Helvetica, sans-serif;
+    font-family: 'Inter', Tahoma, Arial, Helvetica, sans-serif;
     color: #646567;
     margin: 0;
 }
@@ -87,7 +92,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
     color: #004494;
-    font-family: "Titillium Web", Tahoma, Arial, Helvetica, sans-serif;
+    font-family: 'Inter', Tahoma, Arial, Helvetica, sans-serif;
 }
 
 input {
@@ -102,6 +107,7 @@ input {
 input:focus {
     padding: 15px;
     border: solid 5px #004494;
+    outline: none;
 }
 
 select {
@@ -127,11 +133,16 @@ select:focus {
     border-left: none;
     text-decoration: none;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .btn:hover {
     background: #004494;
     color: white;
+}
+
+.btn:focus {
+    outline: none;
 }
 
 .flex {
@@ -148,3 +159,37 @@ div[id^="plyr-settings-"][id$="-captions"] > div {
     overflow-y: scroll;
 }
 
+#videoPlayer {
+    width: 100vw;
+    width: -moz-available;
+    width: -webkit-fill-available;
+    width: fill-available;
+    max-width: 100vw;
+
+    height: 100vh;
+    height: -moz-available;
+    height: -webkit-fill-available;
+    height: fill-available;
+    max-height: 100vh;
+
+    background: black;
+}
+
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    width: 100%;
+    height: auto;
+
+    max-width: 600px;
+
+    background-color: #ffffff;
+    padding: 17px;
+    border: solid 3px #004494;
+    color: #004494;
+
+    z-index: 1000;
+}

@@ -1,18 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 {% include "header.twig" %}
-<body style="overflow: hidden">
-<video id="videoPlayer" autoplay controls data-dashjs-player controlsList="nodownload" crossorigin="anonymous" style="width: 100vw; height: 100vh; background: black"></video>
+<body style="background: black">
+<video id="videoPlayer" autoplay controls data-dashjs-player controlsList="nodownload" crossorigin="anonymous"></video>
+
+<div class="modal" id="errorModal" style="display: none">
+    <h1>This video could not be loaded</h1>
+    <p>
+        It appears that the video you tried to play could not be loaded.
+        Please verify that the original video does have subtitles, and can be loaded from your country.
+        If the issue persists, create an issue on <a href="https://github.com/Koenvh1/european-public-broadcasting">GitHub</a>.
+    </p>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 
-<script src="js/nprogress.js"></script>
+<script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
 <script src="js/Player.js"></script>
 <script src="js/Utils.js"></script>
-<script src="https://cdn.plyr.io/3.5.6/plyr.js"></script>
-{#<script src="js/language-switcher.js"></script>#}
+<script src="https://cdn.plyr.io/3.6.2/plyr.polyfilled.js"></script>
 
 <script>
+    NProgress.start();
     let p = new Player();
     p.load("{{ video|escape }}", "{{ caption|escape }}", {{ protection|json_encode|raw }}).then(() => {
         const plyr = new Plyr('#videoPlayer', {
@@ -31,8 +41,12 @@
                 plyr.currentTime = plyr.currentTime;
             }
         });
+
+        NProgress.done();
+
         p.setLanguage(localStorage.getItem("language") || "en");
         plyr.toggleCaptions(true);
+        // Force reset of current time to activate subtitles
         plyr.currentTime = plyr.currentTime;
     });
 </script>

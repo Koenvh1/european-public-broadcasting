@@ -1,6 +1,7 @@
 class Player {
     constructor() {
         this.videoPlayer = document.querySelector("#videoPlayer");
+        this.errorModal = document.querySelector("#errorModal");
         this.language = localStorage.getItem("language") || "en";
         this.translated = {};
         this.languages = Object.entries(Utils.getLanguages()).map(lang => {
@@ -106,7 +107,7 @@ class Player {
         });
 
         this.videoPlayer.addEventListener("error", (e) => {
-            console.log(this.videoPlayer.error.message);
+            this.errorModal.style.display = "initial";
         });
         this.customVideoUrl = video;
         this.customCaptionUrl = caption;
