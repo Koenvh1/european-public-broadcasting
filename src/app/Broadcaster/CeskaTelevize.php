@@ -24,7 +24,8 @@ class CeskaTelevize extends Broadcaster
                 "playlist[0][stopTime]" => "",
                 "requestUrl" => "/ivysilani/embed/iFramePlayer.php",
                 "requestSource" => "iVysilani",
-                "type" => "html"
+                "type" => "html",
+                "canPlayDRM" => "true"
             ]
         ]);
 

@@ -41,7 +41,7 @@ abstract class Broadcaster
         if (preg_match(ARD::getRegex(), $url)) {
             $broadcaster = new ARD();
         } elseif (preg_match(CeskaTelevize::getRegex(), $url)) {
-            $broadcaster = new ARD();
+            $broadcaster = new CeskaTelevize();
         } elseif (preg_match(DR::getRegex(), $url)) {
             $broadcaster = new DR();
         } elseif (preg_match(ERR::getRegex(), $url)) {

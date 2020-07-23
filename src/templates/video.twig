@@ -24,7 +24,7 @@
 <script>
     NProgress.start();
     let p = new Player();
-    p.load("{{ video|escape }}", "{{ caption|escape }}", {{ protection|json_encode|raw }}).then(() => {
+    p.load("{{ video|escape("js") }}", "{{ caption|escape("js") }}", {{ protection|json_encode|raw }}).then(() => {
         const plyr = new Plyr('#videoPlayer', {
             controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'pip', 'airplay', 'fullscreen'],
             captions: {
