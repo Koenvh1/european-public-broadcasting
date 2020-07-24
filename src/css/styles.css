@@ -4,6 +4,8 @@
     --plyr-color-main: #004494;
     --plyr-menu-color: #000000;
     --plyr-menu-background: #ffffff;
+    --plyr-font-size-large: 5vh;
+    --plyr-font-size-xlarge: 5vh;
 }
 
 html, body {
