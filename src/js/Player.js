@@ -82,6 +82,11 @@ class Player {
 
     setLanguage(language) {
         this.language = language;
+
+        let track = this.getCurrentTrack();
+        if (track != null && track.cues != null) {
+            this.translateSubtitles(track, 0);
+        }
     }
 
     hideCaptions() {

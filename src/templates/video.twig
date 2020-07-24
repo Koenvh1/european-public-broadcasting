@@ -26,7 +26,7 @@
     let p = new Player();
     p.load("{{ video|escape("js") }}", "{{ caption|escape("js") }}", {{ protection|json_encode|raw }}).then(() => {
         const plyr = new Plyr('#videoPlayer', {
-            controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'settings', 'pip', 'airplay', 'fullscreen'],
+            controls: ['play-large', 'play', 'progress', 'current-time', 'duration', 'mute', 'volume', 'settings', 'airplay', 'fullscreen'],
             captions: {
                 active: true,
                 language: localStorage.getItem("language") || "en",
@@ -42,12 +42,13 @@
             }
         });
 
-        NProgress.done();
+        plyr.on("canplay", () => {
+            p.setLanguage(plyr.language);
+        });
 
         p.setLanguage(localStorage.getItem("language") || "en");
-        plyr.toggleCaptions(true);
-        // Force reset of current time to activate subtitles
-        plyr.currentTime = plyr.currentTime;
+
+        NProgress.done();
     });
 </script>
 </body>
