@@ -62,7 +62,9 @@ class Player {
             if (!cue.text) return; // Cue text can be empty on mistake (when still processing), skip it then.
             this.translated[this.language].push(cue.id); // Mark this as translated.
 
-            let text = cue.text.replace(/\s\s+/g, ' '); // Without multiple spaces
+            let text = cue.text;
+            text = text.replace(/[\n\r]/g, ' '); // Without newlines
+            text = text.replace(/\s\s+/g, ' '); // Without multiple spaces
             //console.log(cue.text);
             cue.text = "";
 
