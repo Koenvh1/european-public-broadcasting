@@ -71,10 +71,10 @@ abstract class Broadcaster
             throw new InvalidURLException();
         }
 
-//        try {
+        try {
             return $broadcaster->retrieve($url);
-//        } catch (ClientException $e) {
-//            throw new InvalidURLException();
-//        }
+        } catch (ClientException $e) {
+            throw new InvalidURLException();
+        }
     }
 }
