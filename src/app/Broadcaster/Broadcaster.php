@@ -47,6 +47,8 @@ abstract class Broadcaster
             $broadcaster = new DR();
         } elseif (preg_match(ERR::getRegex(), $url)) {
             $broadcaster = new ERR();
+        } elseif (preg_match(FranceTv::getRegex(), $url)) {
+            $broadcaster = new FranceTv();
         } elseif (preg_match(NPO::getRegex(), $url)) {
             $broadcaster = new NPO();
         } elseif (preg_match(NRK::getRegex(), $url)) {
@@ -69,10 +71,10 @@ abstract class Broadcaster
             throw new InvalidURLException();
         }
 
-        try {
+//        try {
             return $broadcaster->retrieve($url);
-        } catch (ClientException $e) {
-            throw new InvalidURLException();
-        }
+//        } catch (ClientException $e) {
+//            throw new InvalidURLException();
+//        }
     }
 }
