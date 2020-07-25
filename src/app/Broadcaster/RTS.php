@@ -4,6 +4,7 @@
 namespace Koenvh\PublicBroadcasting\Broadcaster;
 
 
+use Koenvh\PublicBroadcasting\InvalidURLException;
 use Koenvh\PublicBroadcasting\StreamInformation;
 
 class RTS extends Broadcaster
@@ -21,6 +22,9 @@ class RTS extends Broadcaster
         $data = $response->getBody()->getContents();
         preg_match_all('/URI="([^"]+)"/', $data, $output_array);
         $subtitleUrl = $output_array[1][0];
+        if ($subtitleUrl == null) {
+            throw new InvalidURLException();
+        }
         $response = $this->client->request("GET", $subtitleUrl);
         $data = $response->getBody()->getContents();
 
