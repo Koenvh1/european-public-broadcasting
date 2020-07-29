@@ -91,6 +91,17 @@ class Player {
         }
     }
 
+    findBestLanguage(languages) {
+        const availableLanguages = Object.keys(Utils.getLanguages());
+        for (let i = 0; i < languages.length; i++) {
+            let language = languages[i];
+            if (availableLanguages.includes(language.language)) {
+                return language.language;
+            }
+        }
+        return "en";
+    }
+
     hideCaptions() {
         for (let i = 0; i < this.videoPlayer.textTracks.length; i++) {
             if (this.videoPlayer.textTracks[i].mode !== "hidden") {

@@ -12,18 +12,22 @@ class StreamInformation
     private $captionUrl;
     /** @var $drmData array */
     private $drmData;
+    /** @var $title string */
+    private $title;
 
     /**
      * StreamInformation constructor.
      * @param string $videoUrl
      * @param string $captionUrl
      * @param array $drmData
+     * @param string $title
      */
-    public function __construct($videoUrl, $captionUrl, $drmData = null)
+    public function __construct($videoUrl, $captionUrl, $drmData = null, $title = "")
     {
         $this->videoUrl = $videoUrl;
         $this->captionUrl = $captionUrl;
         $this->drmData = $drmData;
+        $this->title = $title;
     }
 
     /**
@@ -72,6 +76,22 @@ class StreamInformation
     public function setDrmData($drmData)
     {
         $this->drmData = $drmData;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
     }
 
 

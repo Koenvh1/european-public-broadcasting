@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d24899f6b406fae98ecc7b6525e82f46",
+    "content-hash": "ab4bcb3bc6201857bb09ce7edca6e2e8",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -930,6 +930,47 @@
                 "templating"
             ],
             "time": "2019-11-11T16:52:09+00:00"
+        },
+        {
+            "name": "zonuexe/http-accept-language",
+            "version": "0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BaguettePHP/http-accept-language.git",
+                "reference": "f71422b1200737aa9d7c7fa83f07cbe4616198d5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BaguettePHP/http-accept-language/zipball/f71422b1200737aa9d7c7fa83f07cbe4616198d5",
+                "reference": "f71422b1200737aa9d7c7fa83f07cbe4616198d5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-intl": "*"
+            },
+            "require-dev": {
+                "phploc/phploc": "*",
+                "phpunit/phpunit": "4.1.*",
+                "theseer/phpdox": "0.6.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Teto\\HTTP\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "USAMI Kenta",
+                    "email": "tadsan@zonu.me"
+                }
+            ],
+            "description": "HTTP Accept-Language Header parser",
+            "time": "2014-10-19T09:22:18+00:00"
         }
     ],
     "packages-dev": [],

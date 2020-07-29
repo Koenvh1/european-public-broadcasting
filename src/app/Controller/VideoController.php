@@ -8,6 +8,7 @@ use Koenvh\PublicBroadcasting\Broadcaster\Broadcaster;
 use Koenvh\PublicBroadcasting\InvalidURLException;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use Teto\HTTP\AcceptLanguage;
 
 class VideoController
 {
@@ -25,10 +26,19 @@ class VideoController
         } catch (InvalidURLException $e) {
             return $this->container->view->render($response, "404.twig", []);
         }
+
+        try {
+            $languages = AcceptLanguage::get();
+        } catch (\Exception $e) {
+            $languages = [];
+        }
+
         return $this->container->view->render($response, "video.twig", [
             "video" => $streamInfo->getVideoUrl(),
             "caption" => $streamInfo->getCaptionUrl(),
-            "protection" => $streamInfo->getDrmData()
+            "protection" => $streamInfo->getDrmData(),
+            "title" => $streamInfo->getTitle(),
+            "languages" => $languages
         ]);
     }
 }

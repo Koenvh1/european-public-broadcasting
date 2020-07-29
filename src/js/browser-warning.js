@@ -23,6 +23,6 @@
     let isBlink = (isChrome || isOpera) && !!window.CSS;
 
     if(isIE || isEdge) {
-        $(".browser-warning").show();
+        document.querySelector(".browser-warning").style.display = "initial";
     }
 })();

@@ -13,6 +13,17 @@
     </p>
 </div>
 
+<div class="modal browser-warning" style="display: none">
+    <h1>Your browser is not supported</h1>
+    <p>
+        European Public Broadcasting does not work with your current browser.
+        Please use a modern browser to access European Public Broadcasting, such as the latest version of Chrome, Firefox, Edge, Opera or Safari.
+        If the issue persists, create an issue on <a href="https://github.com/Koenvh1/european-public-broadcasting">GitHub</a>.
+    </p>
+</div>
+
+<script src="js/browser-warning.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 <script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script>
 
@@ -25,13 +36,22 @@
     NProgress.start();
     let p = new Player();
     p.load("{{ video|escape("js") }}", "{{ caption|escape("js") }}", {{ protection|json_encode|raw }}).then(() => {
+        let language = localStorage.getItem("language");
+        if (language == null) {
+            language = p.findBestLanguage({{ languages|json_encode|raw }})
+        }
+
         const plyr = new Plyr('#videoPlayer', {
-            controls: ['play-large', 'play', 'progress', 'current-time', 'duration', 'mute', 'volume', 'settings', 'airplay', 'fullscreen'],
+            controls: ['play-large', 'play', 'progress', 'current-time', 'duration', 'mute', 'volume', 'settings', 'fullscreen'],
             captions: {
                 active: true,
-                language: localStorage.getItem("language") || "en",
+                language: localStorage.getItem("language") || language,
                 update: true
-            }
+            },
+            storage: {
+                enabled: false
+            },
+            disableContextMenu: false
         });
         plyr.on("languagechange", () => {
             if (plyr.language) {
@@ -43,12 +63,12 @@
         });
 
         plyr.on("canplay", () => {
-            p.setLanguage(plyr.language);
+            p.setLanguage(plyr.language || language);
+            NProgress.done();
         });
 
-        p.setLanguage(localStorage.getItem("language") || "en");
+        p.setLanguage(localStorage.getItem("language") || language);
 
-        NProgress.done();
     });
 </script>
 </body>
