@@ -57,6 +57,8 @@ abstract class Broadcaster
             $broadcaster = new RTBF();
         } elseif (preg_match(RTS::getRegex(), $url)) {
             $broadcaster = new RTS();
+        } elseif (preg_match(RUV::getRegex(), $url)) {
+            $broadcaster = new RUV();
         } elseif (preg_match(SVT::getRegex(), $url)) {
             $broadcaster = new SVT();
         } elseif (preg_match(TVP::getRegex(), $url)) {
