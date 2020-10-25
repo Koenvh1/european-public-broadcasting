@@ -14,7 +14,7 @@
         This means that you can for example watch television from the Netherlands with English subtitles, or Swedish television with Dutch subtitles.
     </p>
     <form method="get" action="video" class="flex">
-        <input type="url" class="form-control" id="videoUrl" name="v" placeholder="Video URL" required><button type="submit" class="btn">Let's go</button>
+        <input type="url" class="form-control" id="videoUrl" name="v" placeholder="Video URL" required><button type="submit" class="btn btn-inline">Let's go</button>
     </form>
 
     <h2>Supported broadcasters:</h2>
@@ -109,7 +109,8 @@
     <footer>
         <br>
         Created by <a href="https://koenvh.nl" target="_blank">Koenvh</a>. Contribute on <a href="https://github.com/Koenvh1/european-public-broadcasting" target="_blank">GitHub</a>.
-        <a title="Translate this video" onclick="event.preventDefault(); alert('Drag this link to your bookmark bar to add it as a bookmark')" href="javascript:(() => {window.open('https://publicbroadcasting.eu/video?v=' + encodeURIComponent(location.href), '_blank'); void(0);})();">Add a bookmark</a>
+        <a title="Translate this video" onclick="event.preventDefault(); alert('Drag this link to your bookmark bar to add it as a bookmark')" href="javascript:(() => {window.open('https://publicbroadcasting.eu/video?v=' + encodeURIComponent(location.href), '_blank'); void(0);})();">Add a bookmark</a>.
+        <a href="video?v=manual">Open a local video</a>.
     </footer>
 </div>
 </body>

@@ -22,6 +22,20 @@
     </p>
 </div>
 
+<div class="modal" id="localFile" style="">
+    <h1>Open a local file</h1>
+    <h2>
+        Video file:
+    </h2>
+    <input type="file" name="videoFile" id="videoFile">
+    <h2>
+        Captions file:
+    </h2>
+    <input type="file" name="captionsFile" id="captionsFile">
+    <p></p>
+    <button id="loadLocalFile" class="btn">Open this file</button>
+</div>
+
 <script src="js/browser-warning.js"></script>
 
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
@@ -35,7 +49,10 @@
 <script>
     NProgress.start();
     let p = new Player();
-    p.load("{{ video|escape("js") }}", "{{ caption|escape("js") }}", {{ protection|json_encode|raw }}).then(() => {
+
+    const loaded = () => {
+        document.getElementById("localFile").style.display = "none";
+
         let language = localStorage.getItem("language");
         if (language == null) {
             language = p.findBestLanguage({{ languages|json_encode|raw }})
@@ -68,7 +85,20 @@
         });
 
         p.setLanguage(localStorage.getItem("language") || language);
+    };
 
+    if ("{{ video|escape("js") }}" !== "manual") {
+        p.load("{{ video|escape("js") }}", "{{ caption|escape("js") }}", {{ protection|json_encode|raw }}).then(loaded);
+    }
+
+    document.getElementById("loadLocalFile").addEventListener("click", (e) => {
+        let videoInput = document.getElementById("videoFile").files[0];
+        let captionsInput = document.getElementById("captionsFile").files[0];
+
+        let videoFile = URL.createObjectURL(videoInput);
+        let captionsFile = URL.createObjectURL(captionsInput);
+        p = new Player();
+        p.load(videoFile, captionsFile, null).then(loaded);
     });
 </script>
 </body>

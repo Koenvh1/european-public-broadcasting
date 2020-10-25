@@ -67,6 +67,8 @@ abstract class Broadcaster
             $broadcaster = new YLE();
         } elseif (preg_match(ZDF::getRegex(), $url)) {
             $broadcaster = new ZDF();
+        } elseif (preg_match(Manual::getRegex(), $url)) {
+            $broadcaster = new Manual();
         }
 
         if ($broadcaster == null) {

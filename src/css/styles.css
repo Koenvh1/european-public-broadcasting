@@ -138,10 +138,13 @@ select:focus {
     line-height: 1.1rem;
     padding: 17px;
     border: solid 3px #004494;
-    border-left: none;
     text-decoration: none;
     cursor: pointer;
     font-weight: bold;
+}
+
+.btn-inline {
+    border-left: none;
 }
 
 .btn:hover {
