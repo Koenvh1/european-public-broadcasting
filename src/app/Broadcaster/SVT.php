@@ -33,7 +33,7 @@ class SVT extends Broadcaster
             }
         }
 
-        return new StreamInformation($video, $subtitles);
+        return new StreamInformation("sv", $video, $subtitles);
     }
 
     static function getRegex(): string

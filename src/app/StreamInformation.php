@@ -6,6 +6,8 @@ namespace Koenvh\PublicBroadcasting;
 
 class StreamInformation
 {
+    /** @var $language string */
+    private $language;
     /** @var $videoUrl string */
     private $videoUrl;
     /** @var $captionUrl string */
@@ -17,17 +19,27 @@ class StreamInformation
 
     /**
      * StreamInformation constructor.
-     * @param string $videoUrl
+     * @param string $language The language of the subtitles, set to "auto" to automatically determine the language
+     * @param string $videoUrl "
      * @param string $captionUrl
-     * @param array $drmData
+     * @param array|null $drmData
      * @param string $title
      */
-    public function __construct($videoUrl, $captionUrl, $drmData = null, $title = "")
+    public function __construct(string $language, string $videoUrl, string $captionUrl, $drmData = null, $title = "")
     {
+        $this->language = $language;
         $this->videoUrl = $videoUrl;
         $this->captionUrl = $captionUrl;
         $this->drmData = $drmData;
         $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->language;
     }
 
     /**

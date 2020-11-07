@@ -58,7 +58,7 @@ class NPO extends Broadcaster
         ]);
         $response = json_decode($response->getBody()->getContents(), true);
 
-        return new StreamInformation($response["stream"]["src"], "https://rs.poms.omroep.nl/v1/api/subtitles/" . $videoId . "/nl_NL/CAPTION.vtt", [
+        return new StreamInformation("nl", $response["stream"]["src"], "https://rs.poms.omroep.nl/v1/api/subtitles/" . $videoId . "/nl_NL/CAPTION.vtt", [
             "com.widevine.alpha" => [
                 "serverURL" => $response["stream"]["keySystemOptions"][0]["options"]["licenseUrl"],
                 "httpRequestHeaders" => $response["stream"]["keySystemOptions"][0]["options"]["httpRequestHeaders"],

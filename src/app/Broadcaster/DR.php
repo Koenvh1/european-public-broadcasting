@@ -52,7 +52,7 @@ class DR extends Broadcaster
 //            $video = openssl_decrypt($data, 'aes-256-cbc', $key, OPENSSL_RAW_DATA, $iv);
 //        }
 
-        return new StreamInformation($video, $subtitles);
+        return new StreamInformation("da", $video, $subtitles);
     }
 
     static function getRegex(): string

@@ -40,7 +40,7 @@ class TVP extends Broadcaster
         }
         $subtitles = "data:text/vtt;base64," . base64_encode($vtt);
 
-        return new StreamInformation("https://cors-anywhere.herokuapp.com/$video", $subtitles);
+        return new StreamInformation("pl", "https://cors-anywhere.herokuapp.com/$video", $subtitles);
     }
 
     static function getRegex(): string

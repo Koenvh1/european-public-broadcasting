@@ -17,7 +17,7 @@ class TranslateController
         $params = json_decode(file_get_contents("php://input"), true);
 
         try {
-            $translated = $tr->setTarget($params["target"])->translate($params["text"]);
+            $translated = $tr->setSource($params["source"])->setTarget($params["target"])->translate($params["text"]);
         } catch (ErrorException $e) {
             $translated = $params["text"];
         }

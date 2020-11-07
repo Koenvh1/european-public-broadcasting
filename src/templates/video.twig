@@ -49,6 +49,8 @@
 <script>
     NProgress.start();
     let p = new Player();
+    const sourceLanguage = "{{ sourceLanguage|escape("js") }}";
+    p.setSourceLanguage(sourceLanguage);
 
     const loaded = () => {
         document.getElementById("localFile").style.display = "none";

@@ -1,8 +1,8 @@
 class Utils {
-    static async translate(language, text) {
+    static async translate(sourceLanguage, targetLanguage, text) {
         let translation = await (await fetch("translate", {
             method: "POST",
-            body: JSON.stringify({"target": language, "text": text})
+            body: JSON.stringify({"source": sourceLanguage, "target": targetLanguage, "text": text})
         })).json();
         translation = translation["result"];
 

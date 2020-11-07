@@ -39,7 +39,7 @@ class RTS extends Broadcaster
         }
 
         $subtitles = "data:text/vtt;base64," . base64_encode($vtt);
-        return new StreamInformation($video, $subtitles);
+        return new StreamInformation("fr", $video, $subtitles);
     }
 
     static function getRegex(): string

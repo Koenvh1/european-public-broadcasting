@@ -13,9 +13,7 @@ class Player {
         });
         //this.translated = Object.entries(Utils.getLanguages()).reduce((map, lang) => (map[lang[0]] = [], map), {});
 
-        this.series = null;
-        this.seasonId = null;
-        this.lastOcr = null;
+        this.sourceLanguage = "auto";
 
         this.customVideoUrl = null;
         this.customCaptionUrl = null;
@@ -68,7 +66,7 @@ class Player {
             //console.log(cue.text);
             cue.text = "";
 
-            cue.text = await Utils.translate(this.language, text);
+            cue.text = await Utils.translate(this.sourceLanguage, this.language, text);
         }
     }
 
@@ -89,6 +87,10 @@ class Player {
         if (track != null && track.cues != null) {
             this.translateSubtitles(track, 0);
         }
+    }
+
+    setSourceLanguage(language) {
+        this.sourceLanguage = language;
     }
 
     findBestLanguage(languages) {

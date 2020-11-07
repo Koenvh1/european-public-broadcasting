@@ -24,7 +24,7 @@ class VideoController
     {
         try {
             if (isset($_GET["videoUrl"]) && isset($_GET["captionUrl"])) {
-                $streamInfo = new StreamInformation($_GET["videoUrl"], $_GET["captionUrl"]);
+                $streamInfo = new StreamInformation("auto", $_GET["videoUrl"], $_GET["captionUrl"]);
             } else {
                 $streamInfo = Broadcaster::getStreamInformation($_GET["v"]);
             }
@@ -39,6 +39,7 @@ class VideoController
         }
 
         return $this->container->view->render($response, "video.twig", [
+            "sourceLanguage" => $streamInfo->getLanguage(),
             "video" => $streamInfo->getVideoUrl(),
             "caption" => $streamInfo->getCaptionUrl(),
             "protection" => $streamInfo->getDrmData(),

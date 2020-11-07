@@ -37,7 +37,7 @@ class CeskaTelevize extends Broadcaster
         $subtitlesUrl = $data["playlist"][0]["subtitles"][0]["url"];
         $videoUrl = $data["playlist"][0]["streamUrls"]["main"];
 
-        return new StreamInformation($videoUrl, $subtitlesUrl);
+        return new StreamInformation("cs", $videoUrl, $subtitlesUrl);
     }
 
     static function getRegex(): string

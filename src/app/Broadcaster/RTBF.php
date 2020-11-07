@@ -21,7 +21,7 @@ class RTBF extends Broadcaster
         $video = $data["urlHls"];
         $subtitles = $data["tracks"]["fsm"]["url"];
 
-        return new StreamInformation($video, $subtitles);
+        return new StreamInformation("fr", $video, $subtitles);
     }
 
     static function getRegex(): string

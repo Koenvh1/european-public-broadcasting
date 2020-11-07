@@ -23,7 +23,7 @@ class NRK extends Broadcaster
             "http_errors" => false
         ]);
 
-        return new StreamInformation($video, $subtitles);
+        return new StreamInformation("no", $video, $subtitles);
     }
 
     static function getRegex(): string

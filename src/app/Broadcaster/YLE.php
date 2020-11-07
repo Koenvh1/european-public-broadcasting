@@ -35,7 +35,7 @@ class YLE extends Broadcaster
 
         $response = $this->client->request("GET", "https://external.api.yle.fi/v1/tracking/streamstart?program_id=$id&media_id=$mediaId&app_id=b7a3c2a4&app_key=fe3bfffe34a6ae2e3b972af1a4bf1592");
 
-        return new StreamInformation($video, "");
+        return new StreamInformation("fi", $video, "");
     }
 
     static function getRegex(): string

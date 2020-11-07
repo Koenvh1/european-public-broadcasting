@@ -27,7 +27,7 @@ class RUV extends Broadcaster
         $video = $data["data"]["Program"]["episodes"][0]["file"];
         $subtitles = $data["data"]["Program"]["episodes"][0]["subtitles"][0]["value"];
 
-        return new StreamInformation($video, $subtitles);
+        return new StreamInformation("is", $video, $subtitles);
     }
 
     static function getRegex(): string

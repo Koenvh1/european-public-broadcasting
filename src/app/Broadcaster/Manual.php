@@ -11,7 +11,7 @@ class Manual extends Broadcaster
 
     function retrieve(string $url): StreamInformation
     {
-        return new StreamInformation("manual", "");
+        return new StreamInformation("auto", "manual", "");
     }
 
     static function getRegex(): string

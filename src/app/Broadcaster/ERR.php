@@ -18,7 +18,7 @@ class ERR extends Broadcaster
         $video = $data["media"]["src"]["file"];
         $subtitles = $data["media"]["subtitles"][0]["src"];
 
-        return new StreamInformation($video, $subtitles);
+        return new StreamInformation("et", $video, $subtitles);
     }
 
     static function getRegex(): string

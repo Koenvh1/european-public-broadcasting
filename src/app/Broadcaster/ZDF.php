@@ -35,7 +35,7 @@ class ZDF extends Broadcaster
         $video = $data["priorityList"][0]["formitaeten"][0]["qualities"][0]["audio"]["tracks"][0]["uri"];
         $subtitles = $data["captions"][1]["uri"];
 
-        return new StreamInformation($video, $subtitles);
+        return new StreamInformation("de", $video, $subtitles);
     }
 
     static function getRegex(): string

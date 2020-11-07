@@ -33,7 +33,7 @@ class ARD extends Broadcaster
             $vtt .= "$text\n\n";
         }
         $subtitles = "data:text/vtt;base64," . base64_encode($vtt);
-        return new StreamInformation($video, $subtitles);
+        return new StreamInformation("de", $video, $subtitles);
     }
 
     static function getRegex(): string
