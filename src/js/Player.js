@@ -42,7 +42,7 @@ class Player {
 
         let newItems = [];
 
-        for (let i = (start - 1); i < (start + 2); i++) {
+        for (let i = (start - 1); i < (start + 5); i++) {
             if (cues[i] == null) continue;
             // Make sure it has an ID, and is not OCR
             if (!cues[i].id) continue;
@@ -52,7 +52,7 @@ class Player {
             newItems.push(i);
         }
 
-        for (let i = (start - 1); i < (start + 2); i++) {
+        for (let i = (start - 1); i < (start + 5); i++) {
             // Only translate the next five that have not been translated.
             if (!newItems.includes(i)) continue;
             const cue = cues[i];
