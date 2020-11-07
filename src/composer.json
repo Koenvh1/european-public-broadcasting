@@ -17,7 +17,8 @@
         "ext-openssl": "*",
         "slim/slim": "^3.0",
         "slim/twig-view": "^2.3",
-        "zonuexe/http-accept-language": "^0.4.1"
+        "zonuexe/http-accept-language": "^0.4.1",
+        "google/cloud-translate": "^1.9"
     },
     "autoload": {
         "psr-4": {
