@@ -11,7 +11,7 @@ use Slim\Http\Response;
 
 class TranslateController
 {
-    function __invoke(Request $request, Response $response, $args)
+    function __invokeBackup(Request $request, Response $response, $args)
     {
         $params = json_decode(file_get_contents("php://input"), true);
 
@@ -31,7 +31,7 @@ class TranslateController
         return $response;
     }
 
-    function __invoke2(Request $request, Response $response, $args)
+    function __invoke(Request $request, Response $response, $args)
     {
         $tr = new \Stichoza\GoogleTranslate\GoogleTranslate();
 
