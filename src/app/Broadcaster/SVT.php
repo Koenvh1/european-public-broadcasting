@@ -12,12 +12,13 @@ class SVT extends Broadcaster
     function retrieve(string $url): StreamInformation
     {
         $response = $this->client->request("GET", $url);
-        preg_match_all('/"svtId\\\\":\\\\"(.+?)\\\\"/', $response->getBody()->getContents(), $output_array);
+        preg_match_all('/"videoSvtId\\\\":\\\\"(.+?)\\\\"/', $response->getBody()->getContents(), $output_array);
         $id = $output_array[1][0];
         $response = $this->client->request("GET", "https://api.svt.se/video/$id");
         $data = json_decode($response->getBody(), true);
         $video = "";
         $subtitles = "";
+
         foreach ($data["videoReferences"] as $item) {
             if ($item["format"] == "dash-hbbtv") {
                 $video = $item["url"];
