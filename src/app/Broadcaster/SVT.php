@@ -11,9 +11,15 @@ class SVT extends Broadcaster
 
     function retrieve(string $url): StreamInformation
     {
-        $response = $this->client->request("GET", $url);
-        preg_match_all('/"videoSvtId\\\\":\\\\"(.+?)\\\\"/', $response->getBody()->getContents(), $output_array);
-        $id = $output_array[1][0];
+        if (strpos($url, "modalId") !== false) {
+            $urlComponents = parse_url($url);
+            parse_str($urlComponents["query"], $params);
+            $id = $params["modalId"];
+        } else {
+            $response = $this->client->request("GET", $url);
+            preg_match_all('/"videoSvtId\\\\":\\\\"(.+?)\\\\"/', $response->getBody()->getContents(), $output_array);
+            $id = $output_array[1][0];
+        }
         $response = $this->client->request("GET", "https://api.svt.se/video/$id");
         $data = json_decode($response->getBody(), true);
         $video = "";
