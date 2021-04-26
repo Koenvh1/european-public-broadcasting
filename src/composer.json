@@ -24,5 +24,6 @@
         "psr-4": {
             "Koenvh\\PublicBroadcasting\\": "app/"
         }
-    }
+    },
+    "description": ""
 }
