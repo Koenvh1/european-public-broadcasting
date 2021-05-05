@@ -13,15 +13,16 @@ class TranslateController
 {
     function __invoke(Request $request, Response $response, $args)
     {
-        $tr = new \Stichoza\GoogleTranslate\GoogleTranslate();
-
         $params = json_decode(file_get_contents("php://input"), true);
 
-        try {
-            $translated = $tr->setSource($params["source"])->setTarget($params["target"])->translate($params["text"]);
-        } catch (ErrorException $e) {
-            $translated = $params["text"];
-        }
+        $tr = new TranslateClient([
+            "key" => GOOGLE_TRANSLATE_KEY
+        ]);
+
+        $translated = $tr->translate($params["text"], [
+            "source" => $params["source"],
+            "target" => $params["target"]
+        ])["text"];
 
         $response = $response->withHeader("Content-Type", "application/json");
         $response->getBody()->write(json_encode([
