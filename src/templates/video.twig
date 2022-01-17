@@ -32,6 +32,10 @@
         Captions file:
     </h2>
     <input type="file" name="captionsFile" id="captionsFile">
+    <h2>
+        Source language (ISO-639-1):
+    </h2>
+    <input type="text" name="sourceLanguage" id="sourceLanguage">
     <p></p>
     <button id="loadLocalFile" class="btn">Open this file</button>
 </div>
@@ -97,9 +101,12 @@
         let videoInput = document.getElementById("videoFile").files[0];
         let captionsInput = document.getElementById("captionsFile").files[0];
 
+        let sourceLanguageInput = document.getElementById("sourceLanguage").value;
+
         let videoFile = URL.createObjectURL(videoInput);
         let captionsFile = URL.createObjectURL(captionsInput);
         p = new Player();
+        p.setSourceLanguage(sourceLanguageInput);
         p.load(videoFile, captionsFile, null).then(loaded);
     });
 </script>
