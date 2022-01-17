@@ -10,7 +10,6 @@
     ],
     "require": {
         "guzzlehttp/guzzle": "^6.3",
-        "stichoza/google-translate-php": "^4.0",
         "ext-json": "*",
         "ext-simplexml": "*",
         "phpseclib/mcrypt_compat": "^1.0",
