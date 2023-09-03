@@ -11,111 +11,162 @@ class Utils {
     }
 
     static getLanguages() {
-        return {
-            'af': 'Afrikaans',
-            'sq': 'Albanian',
-            'am': 'Amharic',
-            'ar': 'Arabic',
-            'hy': 'Armenian',
-            'az': 'Azerbaijani',
-            'eu': 'Basque',
-            'be': 'Belarusian',
-            'bn': 'Bengali',
-            'bs': 'Bosnian',
-            'bg': 'Bulgarian',
-            'ca': 'Catalan',
-            'ceb': 'Cebuano',
-            'ny': 'Chichewa',
-            'zh-cn': 'Chinese Simplified',
-            'zh-tw': 'Chinese Traditional',
-            'co': 'Corsican',
-            'hr': 'Croatian',
-            'cs': 'Czech',
-            'da': 'Danish',
-            'nl': 'Dutch',
-            'en': 'English',
-            'eo': 'Esperanto',
-            'et': 'Estonian',
-            'tl': 'Filipino',
-            'fi': 'Finnish',
-            'fr': 'French',
-            'fy': 'Frisian',
-            'gl': 'Galician',
-            'ka': 'Georgian',
-            'de': 'German',
-            'el': 'Greek',
-            'gu': 'Gujarati',
-            'ht': 'Haitian Creole',
-            'ha': 'Hausa',
-            'haw': 'Hawaiian',
-            'iw': 'Hebrew',
-            'hi': 'Hindi',
-            'hmn': 'Hmong',
-            'hu': 'Hungarian',
-            'is': 'Icelandic',
-            'ig': 'Igbo',
-            'id': 'Indonesian',
-            'ga': 'Irish',
-            'it': 'Italian',
-            'ja': 'Japanese',
-            'jw': 'Javanese',
-            'kn': 'Kannada',
-            'kk': 'Kazakh',
-            'km': 'Khmer',
-            'ko': 'Korean',
-            'ku': 'Kurdish (Kurmanji)',
-            'ky': 'Kyrgyz',
-            'lo': 'Lao',
-            'la': 'Latin',
-            'lv': 'Latvian',
-            'lt': 'Lithuanian',
-            'lb': 'Luxembourgish',
-            'mk': 'Macedonian',
-            'mg': 'Malagasy',
-            'ms': 'Malay',
-            'ml': 'Malayalam',
-            'mt': 'Maltese',
-            'mi': 'Maori',
-            'mr': 'Marathi',
-            'mn': 'Mongolian',
-            'my': 'Myanmar (Burmese)',
-            'ne': 'Nepali',
-            'no': 'Norwegian',
-            'ps': 'Pashto',
-            'fa': 'Persian',
-            'pl': 'Polish',
-            'pt': 'Portuguese',
-            'ma': 'Punjabi',
-            'ro': 'Romanian',
-            'ru': 'Russian',
-            'sm': 'Samoan',
-            'gd': 'Scots Gaelic',
-            'sr': 'Serbian',
-            'st': 'Sesotho',
-            'sn': 'Shona',
-            'sd': 'Sindhi',
-            'si': 'Sinhala',
-            'sk': 'Slovak',
-            'sl': 'Slovenian',
-            'so': 'Somali',
-            'es': 'Spanish',
-            'su': 'Sundanese',
-            'sw': 'Swahili',
-            'sv': 'Swedish',
-            'tg': 'Tajik',
-            'ta': 'Tamil',
-            'te': 'Telugu',
-            'th': 'Thai',
-            'tr': 'Turkish',
-            'uk': 'Ukrainian',
-            'ur': 'Urdu',
-            'uz': 'Uzbek',
-            'vi': 'Vietnamese',
-            'cy': 'Welsh',
-            'xh': 'Xhosa',
-            'yi': 'Yiddish',
-            'yo': 'Yoruba',
-            'zu': 'Zulu'
-        };
+        return [
+            {
+                "language": "BG",
+                "name": "Bulgarian",
+                "supports_formality": false
+            },
+            {
+                "language": "CS",
+                "name": "Czech",
+                "supports_formality": false
+            },
+            {
+                "language": "DA",
+                "name": "Danish",
+                "supports_formality": false
+            },
+            {
+                "language": "DE",
+                "name": "German",
+                "supports_formality": true
+            },
+            {
+                "language": "EL",
+                "name": "Greek",
+                "supports_formality": false
+            },
+            {
+                "language": "EN-GB",
+                "name": "English (British)",
+                "supports_formality": false
+            },
+            {
+                "language": "EN-US",
+                "name": "English (American)",
+                "supports_formality": false
+            },
+            {
+                "language": "ES",
+                "name": "Spanish",
+                "supports_formality": true
+            },
+            {
+                "language": "ET",
+                "name": "Estonian",
+                "supports_formality": false
+            },
+            {
+                "language": "FI",
+                "name": "Finnish",
+                "supports_formality": false
+            },
+            {
+                "language": "FR",
+                "name": "French",
+                "supports_formality": true
+            },
+            {
+                "language": "HU",
+                "name": "Hungarian",
+                "supports_formality": false
+            },
+            {
+                "language": "ID",
+                "name": "Indonesian",
+                "supports_formality": false
+            },
+            {
+                "language": "IT",
+                "name": "Italian",
+                "supports_formality": true
+            },
+            {
+                "language": "JA",
+                "name": "Japanese",
+                "supports_formality": true
+            },
+            {
+                "language": "KO",
+                "name": "Korean",
+                "supports_formality": false
+            },
+            {
+                "language": "LT",
+                "name": "Lithuanian",
+                "supports_formality": false
+            },
+            {
+                "language": "LV",
+                "name": "Latvian",
+                "supports_formality": false
+            },
+            {
+                "language": "NB",
+                "name": "Norwegian",
+                "supports_formality": false
+            },
+            {
+                "language": "NL",
+                "name": "Dutch",
+                "supports_formality": true
+            },
+            {
+                "language": "PL",
+                "name": "Polish",
+                "supports_formality": true
+            },
+            {
+                "language": "PT-BR",
+                "name": "Portuguese (Brazilian)",
+                "supports_formality": true
+            },
+            {
+                "language": "PT-PT",
+                "name": "Portuguese (European)",
+                "supports_formality": true
+            },
+            {
+                "language": "RO",
+                "name": "Romanian",
+                "supports_formality": false
+            },
+            {
+                "language": "RU",
+                "name": "Russian",
+                "supports_formality": true
+            },
+            {
+                "language": "SK",
+                "name": "Slovak",
+                "supports_formality": false
+            },
+            {
+                "language": "SL",
+                "name": "Slovenian",
+                "supports_formality": false
+            },
+            {
+                "language": "SV",
+                "name": "Swedish",
+                "supports_formality": false
+            },
+            {
+                "language": "TR",
+                "name": "Turkish",
+                "supports_formality": false
+            },
+            {
+                "language": "UK",
+                "name": "Ukrainian",
+                "supports_formality": false
+            },
+            {
+                "language": "ZH",
+                "name": "Chinese (simplified)",
+                "supports_formality": false
+            }
+        ];
     }
 }

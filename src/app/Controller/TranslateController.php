@@ -4,8 +4,10 @@
 namespace Koenvh\PublicBroadcasting\Controller;
 
 
+use DeepL\Translator;
 use ErrorException;
 use Google\Cloud\Translate\V2\TranslateClient;
+use GuzzleHttp\Client;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -20,19 +22,27 @@ class TranslateController
                 "result" => $params["text"]
             ]));
         } else {
-            $tr = new TranslateClient([
-                "key" => GOOGLE_TRANSLATE_KEY
-            ]);
-
-            $translated = $tr->translate($params["text"], [
-                "source" => $params["source"],
-                "target" => $params["target"]
-            ])["text"];
+            $deepl = new Translator(DEEPL_KEY);
+            $translated = $deepl->translateText($params["text"], $params["source"], $params["target"]);
 
             $response = $response->withHeader("Content-Type", "application/json");
             $response->getBody()->write(json_encode([
                 "result" => html_entity_decode($translated, ENT_QUOTES | ENT_XML1, 'UTF-8')
             ]));
+
+//            $tr = new TranslateClient([
+//                "key" => GOOGLE_TRANSLATE_KEY
+//            ]);
+//
+//            $translated = $tr->translate($params["text"], [
+//                "source" => $params["source"],
+//                "target" => $params["target"]
+//            ])["text"];
+//
+//            $response = $response->withHeader("Content-Type", "application/json");
+//            $response->getBody()->write(json_encode([
+//                "result" => html_entity_decode($translated, ENT_QUOTES | ENT_XML1, 'UTF-8')
+//            ]));
         }
         return $response;
     }

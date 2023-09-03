@@ -4,11 +4,11 @@ class Player {
         this.errorModal = document.querySelector("#errorModal");
         this.language = localStorage.getItem("language") || "en";
         this.translated = {};
-        this.languages = Object.entries(Utils.getLanguages()).map(lang => {
-            this.translated[lang[0]] = [];
+        this.languages = Utils.getLanguages().map(lang => {
+            this.translated[lang["language"].toLowerCase()] = [];
             return {
-                code: lang[0],
-                name: lang[1],
+                code: lang["language"].toLowerCase(),
+                name: lang["name"],
             }
         });
         //this.translated = Object.entries(Utils.getLanguages()).reduce((map, lang) => (map[lang[0]] = [], map), {});
@@ -94,7 +94,7 @@ class Player {
     }
 
     findBestLanguage(languages) {
-        const availableLanguages = Object.keys(Utils.getLanguages());
+        const availableLanguages = Utils.getLanguages().map(lang => lang["language"].toLowerCase());
         for (let i = 0; i < languages.length; i++) {
             let language = languages[i];
             if (availableLanguages.includes(language.language)) {
