@@ -18,7 +18,7 @@ class NPO extends Broadcaster
             "headers" => [
                 "X-Requested-With" => "XMLHttpRequest",
                 "X-Forwarded-For" => $_SERVER["REMOTE_ADDR"],
-                "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
+                "User-Agent" => $_SERVER["HTTP_USER_AGENT"],
             ]
         ]);
         $token = "";
@@ -37,7 +37,7 @@ class NPO extends Broadcaster
                 "X-Requested-With" => "XMLHttpRequest",
                 "X-Xsrf-Token" => urldecode($xsrfToken),
                 "Content-Type" => "application/x-www-form-urlencoded",
-                "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
+                "User-Agent" => $_SERVER["HTTP_USER_AGENT"],
                 "Cookie" => "npo_session=$token",
                 "X-Forwarded-For" => $_SERVER["REMOTE_ADDR"]
             ],
@@ -59,14 +59,19 @@ class NPO extends Broadcaster
         $embed = $this->client->request("GET", $player["embedUrl"], [
             "headers" => [
                 "X-Forwarded-For" => $_SERVER["REMOTE_ADDR"],
-                "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
+                "User-Agent" => $_SERVER["HTTP_USER_AGENT"],
             ]
         ]);
 
-        $response = $this->client->request("POST", "https://start-player.npo.nl/video/$videoId/streams?profile=dash-widevine&quality=npo&tokenId=$token&streamType=broadcast&isYospace=0&videoAgeRating=null&isChromecast=0&mobile=0&ios=0", [
+        $profile = "dash-widevine";
+        if (preg_match('/Edg\//', $_SERVER["HTTP_USER_AGENT"], $output_array)) {
+            $profile = "dash-playready";
+        }
+
+        $response = $this->client->request("POST", "https://start-player.npo.nl/video/$videoId/streams?profile=$profile&quality=npo&tokenId=$token&streamType=broadcast&isYospace=0&videoAgeRating=null&isChromecast=0&mobile=0&ios=0", [
             "headers" => [
                 "X-Forwarded-For" => $_SERVER["REMOTE_ADDR"],
-                "User-Agent" => "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36",
+                "User-Agent" => $_SERVER["HTTP_USER_AGENT"],
                 "Host" => "start-player.npo.nl",
                 "Origin" => "https://start-player.npo.nl",
                 "Referer" => $player["embedUrl"]
@@ -76,10 +81,10 @@ class NPO extends Broadcaster
         $response = json_decode($response->getBody()->getContents(), true);
 
         return new StreamInformation("nl", $response["stream"]["src"], "https://assetscdn.npostart.nl/subtitles/original/nl/$videoId.vtt", [
-            "com.widevine.alpha" => [
+            $response["stream"]["keySystemOptions"][0]["name"] => [
                 "serverURL" => $response["stream"]["keySystemOptions"][0]["options"]["licenseUrl"],
                 "httpRequestHeaders" => $response["stream"]["keySystemOptions"][0]["options"]["httpRequestHeaders"],
-            ]
+            ],
         ]);
     }
 
