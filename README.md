@@ -1,3 +1,6 @@
+## No longer maintained (2025-01-07)
+It was fun for when it worked, but I no longer have the energy to keep up-to-date with the constant updates by streaming platforms.
+
 # European Public Broadcasting
 
 European Public Broadcasting is an attempt to make European content available throughout Europe, 
